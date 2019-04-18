@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/unite.css" />
+    <style>
+        html {
+            background: #F9F9F9;
+        }
+
+        body {
+          background: none;
+        }
+
+        .wrap_head {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          background: #FFFFFF;
+        }
+
+        .wrap_head_h {
+            height: 1.6rem;
+            background: #376AFC;
+            display: flex;
+            flex-direction: column;
+        }
+        .wrap_row{
+          display: flex;
+          justify-content: space-between;
+          margin: .18rem .15rem 0 .15rem;
+        }
+        .row3{
+          margin-top: .32rem;
+        }
+        .left{
+          font-size: .12rem;
+          color: #fff;
+        }
+        .right{
+          height: .14rem;
+          font-size: .12rem;
+          color: #ADC0FF;
+          display: flex;
+          align-items: center;
+        }
+
+        .right1{
+          background: url('../image/fundrecord.png') no-repeat;
+          background-position: right center;
+          padding-top: .02rem;
+          padding-right: .04rem;
+          color: #ADC0FF;
+        }
+
+        .right2{
+          font-size: .2rem;
+          color: #fff;
+        }
+
+        .photo {
+            width: .84rem;
+            height: .84rem;
+            border-radius: 50%;
+            background: #D4EDFF;
+            margin: .26rem 0 .1rem .3rem;
+        }
+
+        .star_grade {
+            font-size: .14rem;
+            color: #FFFFFF;
+            margin-left: .55rem;
+        }
+
+        .wrap_head_r {
+            font-size: .12rem;
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .wrap_head_r_h {
+            color: #E5EBFF;
+            margin: .21rem .23rem 0 0;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .wrap_head_r_h img{
+          width: .04rem;
+          height: .05rem;
+        }
+
+        .wrap_head_r_c {
+            display: flex;
+            flex-direction: row;
+            margin-top: .22rem;
+        }
+
+        .wrap_head_r_c_left {
+            color: #fff;
+            margin: .1rem .07rem .04rem 0;
+        }
+
+        .wrap_head_r_c_center {
+            color: #fff;
+            font-size: .26rem;
+            margin-right: .07rem;
+        }
+
+        .wrap_head_r_c_right {
+            color: #fff;
+            font-size: .15rem;
+            margin: .1rem .12rem 0 0;
+        }
+
+        .wrap_head_r_f {
+            display: flex;
+            flex-direction: row;
+            margin-top: .14rem;
+        }
+
+        .row2 {
+            margin-left: .4rem;
+        }
+
+        .row {
+            height: .42rem;
+            line-height: .42rem;
+            color: #2A3145;
+            font-size: .16rem;
+            display: flex;
+            justify-content: space-between;
+            margin: 0 .29rem 0 .29rem;
+        }
+
+        .blank {
+            height: .02rem;
+            background: #F6F6F6;
+            margin: 0 .27rem 0 .28rem;
+        }
+        .row_left{
+          color: #666666;
+        }
+        .wrap_body{
+          margin-top: .1rem;
+          background: #FFFFFF;
+        }
+        .row1{
+          font-size: .16rem;
+          color: #414758;
+          padding-top: .06rem;
+          margin-top: 0;
+        }
+        .wrap_footer{
+          font-size: .18rem;
+          height: .45rem;
+          line-height: .45rem;
+          text-align: center;
+          border-radius: .06rem;
+          background: #376AFC;
+          color: #fff;
+          margin: .28rem .15rem .29rem .15rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="wrap_head">
+            <div class="wrap_head_h">
+                <div class="wrap_row">
+                  <div class="img">
+                    <span class="grade">L1</span>
+                  </div>
+                  <div class="right right1" onclick='CatHistory()'>查看历史分红</div>
+                </div>
+                <div id="headcontent"></div>
+            </div>
+            <div class="row row1">
+                <div class="row_left">大区</div>
+            </div>
+            <div class="blank"></div>
+            <div id="bigcontent"></div>
+        </div>
+        <div class="wrap_body">
+           <div class="row row1">
+               <div class="row_left">小区</div>
+           </div>
+           <div class="blank"></div>
+            <div id="smallcontent"></div>
+        </div>
+        <div class="wrap_footer" onclick='buy()'>激活</div>
+    </div>
+    <script type="text/template" id="headtmpl">
+      <div class="wrap_row row3">
+        <div class="left">当前积分剩余(AIB)</div>
+        <div class="right right2">{{= it.points}}</div>
+      </div>
+      <div class="wrap_row">
+        <div class="left">上周分红(AIB)</div>
+        <div class="right right2">{{= it.lastWeekBonus}}</div>
+      </div>
+    </script>
+    <script type="text/template" id="bigcontenttmpl">
+      <div class="row">
+          <div class="row_left">总人数:</div>
+          <div>{{= it.mainBranchNodes}}人</div>
+      </div>
+      <div class="row">
+          <div class="row_left">当周贡献:</div>
+          <div>{{= it.mainBranchWeeklyProfit}}</div>
+      </div>
+      <div class="row">
+          <div class="row_left">总贡献:</div>
+          <div>{{= it.mainBranchTotalProfit}}</div>
+      </div>
+    </script>
+    <script type="text/template" id="smallcontenttmpl">
+      <div class="row">
+          <div class="row_left">总人数:</div>
+          <div>{{= it.minorBranchNodes}}人</div>
+      </div>
+      <div class="row">
+          <div class="row_left">当周贡献:</div>
+          <div>{{= it.minorBranchWeeklyProfit}}</div>
+      </div>
+      <div class="row">
+          <div class="row_left">总贡献:</div>
+          <div>{{= it.minorBranchTotalProfit}}</div>
+      </div>
+    </script>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/zeptp.min.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript" src="../script/doT.min.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+      getRequest('branch/getBranchInfo','',function(ret){
+        console.log(JSON.stringify(ret));
+        let headTmpl = doT.template($api.dom('#headtmpl').innerHTML);
+        $api.dom('#headcontent').innerHTML = headTmpl(ret.data);
+        let bigcontentTmpl = doT.template($api.dom('#bigcontenttmpl').innerHTML);
+        $api.dom('#bigcontent').innerHTML = bigcontentTmpl(ret.data);
+        let smallcontentTmpl = doT.template($api.dom('#smallcontenttmpl').innerHTML);
+        $api.dom('#smallcontent').innerHTML = smallcontentTmpl(ret.data);
+      })
+    };
+    function CatHistory() {
+      api.openWin({
+          name: 'history_in_win',
+          url: './history_in_win.html',
+          pageParam: {
+              name: 'test'
+          }
+      });
+    }
+    function buy() {
+      api.openWin({
+          name: 'buyDetail_win',
+          url: './buyDetail_win.html',
+          pageParam: {
+              name: 'test'
+          }
+      });
+    }
+</script>
+
+</html>

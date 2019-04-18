@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <style>
+          html{
+            background: #F9F9F9;
+          }
+          body{
+
+          }
+          .wrap{
+            margin: .1rem 0 0 .19rem;
+          }
+          .row{
+            height: .16rem;
+            font-size: .16rem;
+            background: #fff;
+            color: #404249;
+            padding: .15rem 00 .15rem;
+          }
+          .row span{
+            vertical-align: middle;;
+          }
+          .row img:nth-child(1){
+            width: .17rem;
+            height: .16rem;
+            margin: 0;
+            margin-right: .19rem;
+            vertical-align: middle;
+          }
+          .more{
+            float: right;
+            width: .08rem;
+            height: .12rem;
+            margin: 0;
+            margin-right:.15rem;
+          }
+          .blank{
+            float: right;
+            width: 85.86%;
+            height: 1px;
+            background: #F6F6F6;
+          }
+          .loginblank{
+            height:20px;background: #F6F6F6;width:100%
+          }
+          .loginout{
+            text-align: center;
+          }
+      </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="row">
+        <img src="../image/center.png">
+        <span>客服</span>
+        <img class='more' src="../image/arrow_right.png">
+      </div>
+      <div class="blank"></div>
+      <div class="row">
+        <img src="../image/about.png">
+        <span>关于</span>
+        <img class='more' src="../image/arrow_right.png">
+      </div>
+      <div class="blank" style="width:100%"></div>
+    </div>
+    <div class="loginblank"></div>
+    <div class="loginout row" onclick="closeapp()">
+      <span>注销</span>
+    </div>
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/common.js"></script>
+  <script type="text/javascript">
+      apiready = function(){
+
+      };
+      function closeapp() {
+        // api.closeWin();
+        api.openWin({
+            name: 'index',
+            url: '../index.html',
+            bounces:false,
+        });
+      }
+  </script>
+  </html>

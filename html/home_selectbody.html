@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>选择标签页</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+      <style media="screen">
+      .row {
+          padding:.2rem 0 0 .26rem;
+          position: relative;
+          color:#2D3143;
+      }
+      .row span {
+          font-size: 0.16rem;
+          line-height: .2rem;
+      }
+      .check {
+          position: absolute;
+          left:0;
+          top:.21rem ;
+          width: .16rem;
+          height: .16rem;
+          background:url("../image/check.png") center no-repeat;
+          background-size: 100% 100%;
+      }
+
+      .active .check {
+          background-image: url("../image/check_on.png");
+      }
+      .wrap{
+        width: 90%;
+        bottom: .2rem;
+        left: 5%;
+        background: #fff;
+        border-radius: .26666rem;
+        height: auto;
+      }
+      /*搜索框*/
+      .bar {
+        /*position: fixed; top: 0; left: 0; right: 0; /* 决定了搜索框置顶 */*/
+        position: absolute;
+        top: .44rem;
+        height: 44px; padding: 0 10px;
+        background-color: #fff; opacity: 0.8; /* 搜索框半透明效果 */
+        z-index: 10;
+      }
+      .bar form {
+        display: block; padding: 0;margin: 0;
+      }
+      .search-row {
+        position: relative;
+        height: 30px; padding: 7px 0;
+        color: #999;
+      }
+      .search-row input[type=search] {
+        position: absolute; top: 7px;
+        height: 30px; line-height: 21px; width: 100%; padding: 10px 15px 10px 30px;
+        border: 0; border-radius: 6px; outline: 0; background-color: rgba(0,0,0,0.1);
+        font-size: 16px; text-align: center;
+        z-index: 100;
+      }
+      .search-row .placeholder {
+        position: absolute; top: 2px; left: 0; right: 0;
+        display: inline-block; height: 34px; line-height: 34px;
+        border: 0; border-radius: 6px;
+        font-size: 16px; text-align: center; color: #999;
+        z-index: 1;
+      }
+      .search-row .placeholder .iconfont {
+        display: inline-block; width: 19px; line-height: 24px; padding: 10px 0;
+        font-size: 21px; color: #666;
+      }
+      .search-row .placeholder .text {
+        line-height: 40px;
+        vertical-align: top;
+      }
+      </style>
+  </head>
+  <body>
+    <div class="bar">
+      <form name="search" class="search" id="search" action="">
+        <div class="search-row">
+          <input type="search" name="word" id="word" tapmode onkeyup="searchMethod()" onblur="blurM()" onfocus="focusM()">
+          <span class="placeholder "><span onclick="clearkey()" class="iconfont icon-sousuo"></span><span class="text">搜索标签</span></span>
+        </div>
+      </form>
+    </div>
+    <div class="wrap">
+      <div id="selectLabel"></div>
+    </div>
+    <script id="containTmpl" type="text/template">
+
+      {{ for(let i in it) { }}
+        <div class="row" tapmode onclick="check(this)">
+          <!-- <div class="check"></div> -->
+          <span>{{= it[i]}}</span>
+        </div>
+      {{ } }}
+    </script>
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/zepto.min.js"></script>
+  <script type="text/javascript" src="../script/doT.min.js"></script>
+  <script type="text/javascript" src="../script/common.js"></script>
+  <script type="text/javascript">
+  var picName = [];
+  apiready = function() {
+      fnReady();
+      getRequest('question/getTagConfig','',function(ret){
+        var picData = ret.data.picTag;
+        for(var tag in picData){
+          picName.push(picData[tag].name);
+        }
+        let conditionals = doT.template($api.dom('#containTmpl').innerHTML);
+        $("#selectLabel").html(conditionals(picName));
+      });
+
+  };
+  // 答案选择
+  function check(that){
+      $('.row').removeClass('active')
+      $(that).addClass('active')
+      let answer = $('.active').find('span').html();
+      api.openWin({
+          name: 'main',
+          url: './main.html',
+          pageParam: {
+              name: answer
+          }
+      });
+      api.sendEvent({
+        name: 'myEvent',
+        extra: {
+            msg: answer
+        }
+      });
+  }
+  function searchMethod() {
+    // console.log(JSON.stringify($("#word").val()))
+    var keyWord = $("#word").val();
+    fuzzyQuery(picName,keyWord);
+  };
+  function focusM(){
+    $('.placeholder').hide();
+  }
+  function blurM(){
+    let valus = $("#word").val();
+    if(!valus){
+      $('.placeholder').show();
+    }
+  };
+  function clearkey(){
+    $("#word").val("");
+  };
+  function fuzzyQuery(list, keyWord) {
+    var arr = [];
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].indexOf(keyWord) >= 0) {
+        arr.push(list[i]);
+      }
+    }
+    // console.log(JSON.stringify(arr))
+    labelKeyWord(arr);
+    // return arr;
+  }
+  var labelKeyWord = function(text){
+    if(!text){
+      text = picName;
+    }
+    let conditionals = doT.template($api.dom('#containTmpl').innerHTML);
+    $("#selectLabel").html(conditionals(text));
+  }
+  </script>
+  </html>

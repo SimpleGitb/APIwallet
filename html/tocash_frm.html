@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <style>
+          .blank{ height: .1rem; background: #F9F9F9;}
+          .adress{ font-size:.16rem; color:#2A3145; margin:.2rem 0 0 .15rem; }
+          .ethadress{ height:.47rem; }
+          input{ font-size: .14rem;width: 80%; height: .2rem;line-height: .2rem;outline: none; position: absolute; left:.15rem; margin-top: .15rem;}
+          .blank_3{ height: 1px; background:#F9F9F9; width: 93%; margin: auto;}
+          .btn{font-size:.18rem; margin: .3rem .15rem;height: .45rem; line-height: .45rem; text-align: center; background: #376AFC;  color: #fff;  border-radius: .06rem;}
+          .title{ font-size:.16rem; color: #2A3145; margin: .2rem 0 0 .15rem; margin-bottom: .1rem;}
+          .row{ height: .75rem;font-size: .12rem; color: #BEBEBE;}
+          .row_t{ font-size:.15rem; color: #50D26F; padding: .2rem 0 0 .15rem; display: flex; justify-content: space-between;}
+          .row_r{ font-size:.2rem; color: #50D26F;margin-right: .15rem;}
+          .row_b{ display: flex; justify-content: space-between; margin:.08rem .15rem .17rem .15rem; }
+          .blank_2{ height: 1px; background:#F9F9F9; width: 96%; margin-left: 4%;}
+      </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="blank"></div>
+      <div class="wrap_top">
+        <div class="adress">您的AIB充值地址:</div>
+        <div class="ethadress"><input id="CashAddress" placeholder="请输入您AIB的提现地址"></div>
+        <div class="blank_3"></div>
+        <div class="adress">输入您的提现数量(当前手续费：25%):</div>
+        <div class="ethadress"><input id="tocashnum" placeholder="单行输入"></div>
+        <div class="blank_3"></div>
+        <div class="btn" onclick="toCash()">确认提现</div>
+      </div>
+      <div class="blank"></div>
+      <div class="wrap_b" >
+        <div class="title">充值记录</div>
+        <div id="tocash" id="tocash">
+
+        </div>
+      </div>
+    </div>
+  </body>
+  <script type='text/template' id='tocashTmpl'>
+    {{if( it && it.length>0){ }}
+    {{ for(let k in it) { }}
+        <div class="row">
+          <div class="row_t">
+            <span class="row_l">提现</span>
+            <span class="row_r">-{{=it[k].amount}}</span>
+          </div>
+          <div class="row_b">
+            <span>2019/01/03 18:23</span>
+            <span>AIB</span>
+          </div>
+        </div>
+        <div class="blank_2"></div>
+    {{ } }}
+    {{ }else{ }}
+
+    {{ } }}
+  </script>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/common.js"></script>
+  <script type="text/javascript" src="../script/zepto.min.js"></script>
+  <script type="text/javascript" src="../script/doT.min.js"></script>
+  <script type="text/javascript" src="../script/aes.js"></script>
+  <script type="text/javascript">
+      let buypwd = $api.getStorage('password');
+      apiready = function(){
+        userInfo = $api.getStorage('userInfo');
+        postRequest('getTransactionRecordList',{accessToken: userInfo.token,},function(ret) {
+          if(ret.flag ==true && ret){
+            console.log(JSON.stringify(ret.data))
+            let tocashTmpl = doT.template($api.byId('tocashTmpl').innerHTML);
+            $api.byId('tocash').innerHTML = tocashTmpl(ret.data.rows);
+          }
+        })
+      };
+      function toCash(){
+        postRequest('getAeskey',{accessToken:userInfo.token},function (ret) {
+          if(ret.flag == true){
+            key =ret.data;
+            console.log(key);
+            var keyval = CryptoJS.enc.Utf8.parse(key);
+            console.log(keyval);
+            var plaintText = buypwd;
+            var iv   = CryptoJS.enc.Latin1.parse('ed16b1f8a9e648d4');
+            var encryptedData = CryptoJS.AES.encrypt(plaintText, keyval, {
+                iv:iv,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            });
+            enced = CryptoJS.enc.Base64.stringify(encryptedData.ciphertext);
+            console.log(enced);
+            postRequest('trade',{fromAccount:userInfo.address,
+                toAccount: $api.val($api.dom('#CashAddress')),
+                money: $api.val($api.dom('#tocashnum')),
+                currecy:'AIB',
+                password:enced,
+                accessToken:userInfo.token},
+              function(ret){
+              if(ret.flag ==true){
+                api.sendEvent({
+                    name: 'update',
+                });
+              }
+          })
+        }
+      })
+    }
+
+  </script>
+  </html>

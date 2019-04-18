@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+      <style>
+          *{
+            margin: 0;
+            padding: 0
+          }
+          html{
+            background: #f5f5f5;
+          }
+          body{
+            background: none;
+          }
+          .row{
+            height: 2.15rem;
+            border-radius: .06rem;
+            margin: .1rem .15rem 0 .15rem;;
+            background: #ffffff;
+          }
+          .row_top{
+            height: .56rem;
+            display: flex;
+            flex-direction: row;
+          }
+          img{
+            width: .13rem;
+            height: .15rem;
+            margin:.21rem .09rem 0 .15rem;
+          }
+          .row_top_r{
+            height: .16rem;
+            font-size: .16rem;
+            color: #414758;
+            margin-top: .19rem;
+          }
+          .blank{
+            height: .01rem;
+            margin: 0 .15rem;
+            background: #F6F6F6;
+          }
+          .wrap_row{
+            font-size: .14rem;
+            display: flex;
+            justify-content: space-between;
+          }
+          .wrap_row_l{
+            height: .14rem;
+            color: #666666;
+            margin: 0.13rem 0 0 0.15rem;
+          }
+          .Event{
+            margin: .18rem 0 0 .15rem;
+          }
+          .wrap_row2{
+            color: #2A3145;
+            margin: 0.13rem 0.15rem 0 0;
+          }
+          .EventNum{
+            margin-top: .18rem;
+          }
+          .LeaveEvent{
+            margin: .13rem 0 0 .15rem;
+          }
+          .Value{
+            margin: .13rem 0 0 .15rem;
+          }
+          .AllValue{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+          }
+          .AllValue_l{
+            height: .14rem;
+            line-height: .14rem;
+            font-size: .14rem;
+            margin: .24rem 0 0 .15rem;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+          }
+          .AllValue_ll{
+            color: #2A3145;
+          }
+          .AllValue_rr{
+            color: #FF4F00;
+          }
+          .AllValue_r{
+            font-size: .14rem;
+            height: .2rem;
+            line-height: .2rem;
+            background:#FF4F00;
+            color:#FFFFFF;
+            padding: .05rem .15rem .05rem .15rem;
+            margin: .16rem .15rem 0 0;
+            border-radius: .06rem;
+          }
+      </style>
+  </head>
+  <body>
+      <div class="wrap">
+        <div id='scroll'>
+
+        </div>
+        <script type='text/template' id='scrolltmpl'>
+          {{ if(it && it.length > 0){ }}
+            {{for (var i in it) { }}
+              <div class="row">
+                <div class="row_top">
+                  <img src="../image/theme.png">
+                  <div class="row_top_r">卷轴等级:{{=it[i].name}}</div>
+                </div>
+                <div class="blank"></div>
+                <div class="wrap_bottom">
+                  <div class="wrap_row">
+                    <span class="Event wrap_row_l">每日任务</span>
+                    <span class="EventNum wrap_row2">{{=it[i].dailyTask}}道</span>
+                  </div>
+                  <div class="wrap_row">
+                    <span class="LeaveEvent wrap_row_l">任务总量</span>
+                    <span class="LeaveEventNum wrap_row2">{{=it[i].totalTask}}道</span>
+                  </div>
+                  <div class="wrap_row">
+                    <span class="Value wrap_row_l">每个价值</span>
+                    <span class="ValueNum wrap_row2">{{=it[i].bonus}}AIB</span>
+                  </div>
+                  <div class="AllValue">
+                    <div class="AllValue_l">
+                      <span class="AllValue_ll">总价值:</span>
+                      <span class="AllValue_rr">{{=it[i].cost}}AIB</span>
+                    </div>
+                    <div class="AllValue_r" onclick="buy('{{=it[i].name}}','{{=it[i].dailyTask}}','{{=it[i].totalTask}}','{{=it[i].bonus}}','{{=it[i].cost}}','{{=it[i].rank}}')">点击购买</div>
+                  </div>
+                </div>
+              </div>
+            {{ } }}
+          {{ }else{ }}
+            <div class="noData">暂无可购买的卷轴</div>
+          {{ } }}
+          </script>
+      </div>
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/zeptp.min.js"></script>
+  <script type="text/javascript" src="../script/common.js"></script>
+  <script type="text/javascript" src="../script/doT.min.js"></script>
+  <script type="text/javascript">
+  apiready = function(){
+      getData();
+      api.addEventListener({
+          name: 'upDateScroll'
+      }, function(ret, err) {
+          getData();
+      });
+  }
+  function buy(name,dailyTask,totalTask,bonus,cost,rank) {
+    api.closeToWin({
+        name: 'buyDetail_win',
+        url: './buyDetail_win.html',
+        pageParam: {
+          name: name,
+          dailyTask: dailyTask,
+          totalTask: totalTask,
+          bonus: bonus,
+          cost: cost,
+        }
+    });
+    console.log(rank)
+    api.sendEvent({
+        name: 'myEventa',
+        extra: {
+          name: name,
+          dailyTask: dailyTask,
+          totalTask: totalTask,
+          bonus: bonus,
+          cost: cost,
+          rank:rank
+        }
+    });
+  }
+
+  function getData(){
+      getRequest('branch/giftScrollList','',function(ret){
+        // console.log(JSON.stringify(ret))
+        var scrolltmpl = doT.template($api.dom('#scrolltmpl').innerHTML);
+        $api.dom('#scroll').innerHTML = scrolltmpl(ret.data);
+      })
+  }
+  </script>
+  </html>

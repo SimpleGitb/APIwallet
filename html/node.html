@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>节点</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+    <!-- <link rel="stylesheet" type="text/css" href="../css/style.css"/> -->
+    <style>
+        html{ background: #F9F9F9; }
+        body{ background: #F9F9F9;}
+        #header{ font-size: .18rem; height: .44rem;text-align: center;line-height: .44rem; background: #fff;}
+        .main { font-size:.14rem; padding:.11rem .15rem;}
+        li{ border-radius:.1rem; background: #fff; margin-top: .1rem;}
+        .title{ font-size: .16rem;padding-top: .11rem; padding-bottom: .11rem; display: flex; justify-content: space-between; align-items: center;}
+        .row{ background: #376AFC;}
+        .row .info span{ color: #fff;}
+        .row .info .left{ color: #ccc;}
+        .title2{ background: #EFF3FF; border-top-left-radius: .1rem; border-top-right-radius: .1rem;}
+        .img{width: .16rem; height: .14rem; margin: 0 .1rem 0 .18rem;}
+        .scrollcenter{ color: #fff;}
+        .title_left{ display: flex; align-items: center;}
+        .right{ float: right;width: .10rem; height: .14rem; margin-right:.14rem; }
+        .blank{ height: .01rem; background:#4C7AFE; margin: 0 .15rem;}
+        .info{ padding: 0.12rem 0 .12rem .15rem; color:#FF5656; }
+        .info span{ color:#414758; }
+        .top{ margin-bottom: .1rem;}
+        .button {width: 100%;height: .45rem;font-size: .2rem;color: #fff;margin-top: .66rem;background:rgba(55,106,252,1);border-radius: .06rem;display: flex; align-items: center;justify-content: center;}
+        .share{ width: .18rem; height: .18rem; margin-right: .1rem;}
+    </style>
+</head>
+<body>
+    <div id="header">
+        <div class="nav">节点</div>
+    </div>
+    <div class="main">
+        <ul class="node-box">
+            <li onclick='goscroll()' class="row" id="scrollBox"></li>
+            <li onclick='goteam()' id="myTeam">
+
+            </li>
+            <li onclick='goServiceCenter()'>
+                <div class="title title2"><div class="title_left"><img class='img' src='../image/service.png'><span>服务中心</span></div><img class='right' src='../image/more2.png'></div>
+                <div class="info" id="serviceCenter"></div>
+            </li>
+        </ul>
+        <div class="button" onclick='share()'><img class='share' src='../image/share.png'>点击分享</div>
+    </div>
+    <script type='text/template' id='scrolltmpl'>
+      {{ if(it && it.length > 0){ }}
+        <div class="title"><div class="title_left"><img class='img' src='../image/scrollcenter.png'><span class="scrollcenter">卷轴中心</span></div><img class='right' src='../image/more1.png'></div>
+        <div class="blank"></div>
+        <div class="info">
+            <div class="top"><span class="left">当前卷轴：</span>
+                <span>{{=it[0].name}} </span>
+            </div>
+            <div><span class="left">剩余题目：</span>
+              <span>{{=it[0].taskRemain}}道</span>
+            </div>
+        </div>
+      {{ }else{ }}
+        <div class="title"><div class="title_left"><img class='img' src='../image/scrollcenter.png'><span class="scrollcenter">卷轴中心</span></div><img class='right' src='../image/more1.png'></div>
+        <div class="blank"></div>
+        <div class="info">
+            <div class="top"><span class="left">当前卷轴：</span><span>未购买卷轴</span></div>
+            <div><span class="left">剩余题目：</span><span>0道</span></div>
+        </div>
+      {{ } }}
+    </script>
+    <script type="text/template" id="servicetmpl">
+    <div class="top">
+    <span>贡献总值：</span>{{= parseInt(it.minorBranchTotalProfit)+parseInt(it.mainBranchTotalProfit)}}
+    </div>
+    <div>
+      <span>分红比例：</span>
+      {{= dividendRatio(it.rank)}}
+    </div>
+    </script>
+    <script type='text/template' id='myTeamtmpl'>
+      <div class="title title2"><div class="title_left"><img class='img' src='../image/myteam.png'><span>我的社群</span></div><img class='right' src='../image/more2.png'></div>
+      <div class="info">
+          <div class="top"><span>活跃度：</span>{{=it.length}}<span>人</span></div>
+          <div><span>累计收益：</span>100<span>AIB</span></div>
+      </div>
+    </script>
+  </body>
+    <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript" src="../script/zeptp.min.js"></script>
+    <script type="text/javascript" src="../script/common.js"></script>
+    <script type="text/javascript" src="../script/doT.min.js"></script>
+    <script type="text/javascript">
+        apiready = function () {
+            fnReady()
+            getData();
+            api.addEventListener({
+                name: 'upDateScroll'
+            }, function(ret, err) {
+                getData();
+            });
+            getRequest('branch/getBranchInfo','',function(ret){
+              if(ret.flag ==true && ret){
+                let todayTmpl = doT.template($api.dom('#servicetmpl').innerHTML);
+                $api.dom('#serviceCenter').innerHTML = todayTmpl(ret.data)
+              }
+            })
+            getRequest('branch/getSubBranchList','',function (ret){
+              if(ret.flag ==true && ret){
+                let myTeamtmpl = doT.template($api.byId('myTeamtmpl').innerHTML);
+                $api.byId('myTeam').innerHTML = myTeamtmpl(ret.data);
+              }
+            })
+        }
+        function goscroll() {
+          api.openWin({
+              name: 'scroll_center_win',
+              url: './scroll_center_win.html',
+              bounces:false,
+          });
+        }
+        function goteam() {
+          api.openWin({
+              name: 'myteam_win',
+              url: './myteam_win.html',
+              bounces:false,
+          });
+        }
+        function goServiceCenter() {
+          api.openWin({
+              name: 'service_center_win',
+              url: './service_center_win.html',
+              bounces:false,
+          });
+        }
+        function share() {
+          api.openWin({
+              name: 'share_win',
+              url: './share_win.html',
+              bounces:false,
+          });
+        }
+        function getData(){
+            getRequest('task/getProgress','',function(ret){
+              var scrolltmpl = doT.template($api.dom('#scrolltmpl').innerHTML);
+              $api.dom('#scrollBox').innerHTML = scrolltmpl(ret.data);
+            })
+        }
+        var dividendRatio = function(val){
+          var text;
+          if(val == "1"){
+            text = "25%";
+          }else if (val == "2") {
+            text = "20%"
+          }else if (val == "3") {
+            text = "15%"
+          }else if (val == "4") {
+            text = "10%"
+          }else if (val == "5") {
+            text = "5%";
+          }else{
+            text = val;
+          }
+          return text;
+        }
+    </script>
+</html>

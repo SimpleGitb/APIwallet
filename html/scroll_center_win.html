@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>卷轴中心</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <style>
+        nav {
+            width: 100%;
+            height: .4rem;
+            list-style: none;
+            display: block;
+            background: #fff;
+            position: relative;
+        }
+
+        nav li {
+            width: 50%;
+            line-height: .4rem;
+            font-size: .16rem;
+            float: left;
+            text-align: center;
+            color:#B8BCC8;
+        }
+        span{
+          width: .64rem;
+          height: .16rem;
+          font-size: .16rem;
+        }
+        .active {
+            color:#376AFC;
+        }
+
+        .navbar-item-hov {
+            background-color: rgba(254, 242, 228, 0.7);
+        }
+
+        #buttom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: .64rem;
+            height: .02rem;
+            border-radius: .01rem;
+            margin-left: 16.8%;
+            background: #376AFC;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header id="header">
+        <div class="event-back"></div>
+        <div class="nav">卷轴中心</div>
+    </header>
+    <nav>
+        <li tapmode="navbar-item-hov" class='border_recommand' onclick="framelist(0)">我的卷轴</li>
+        <li tapmode="navbar-item-hov" class='border_list' onclick="framelist(1)">购买卷轴</li>
+        <mark id="buttom"></mark>
+    </nav>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/zepto.min.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript">
+    var header = $api.dom('header');
+    var headerpos = $api.offset(header);
+    apiready = function() {
+        fnReady()
+        showframegroup();
+    };
+
+    function showframegroup() {
+        var nav = $api.dom('nav');
+        var navpos = $api.offset(nav);
+        api.openFrameGroup({
+            name: 'group1',
+            background: 'rgba(160, 160, 164, 0.2)',
+            scrollEnabled: true,
+            rect: {
+                x: 0,
+                y: $api.dom('#header').offsetHeight + $api.dom('nav').offsetHeight,
+                w: 'auto',
+                h: 'auto'
+            },
+            index: 0,
+            frames: [{
+                name: 'scroll_center_frm',
+                url: './scroll_center_frm.html',
+                bounces: false,
+                bgColor: '#fff'
+            }, {
+                name: 'scroll_center_frm1',
+                url: './scroll_center_frm1.html',
+                bounces: false,
+                bgColor: '#fff'
+            }]
+        }, function(ret, err) {
+            frameStatue(ret.index);
+        });
+    }
+
+    function frameStatue(frameIndex) {
+        var num = api.winWidth / 2;
+        switch (frameIndex) {
+            case 0:
+                $api.addCls($api.dom('.border_recommand'), 'active');
+                $api.removeCls($api.dom('.border_list'), 'active');
+                var dist = num * frameIndex;
+                $api.css($api.byId('buttom'), "-webkit-transform:translate(" + dist + "px,0)");
+                break;
+            case 1:
+                $api.removeCls($api.dom('.border_recommand'), 'active');
+                $api.addCls($api.dom('.border_list'), 'active');
+                var dist = num * frameIndex;
+                $api.css($api.byId('buttom'), "-webkit-transform:translate(" + dist + "px,0)");
+                break;
+            default:
+        }
+    }
+
+    function framelist(frameIndex) {
+        api.setFrameGroupIndex({
+            name: 'group1',
+            index: frameIndex,
+            scroll: false
+        });
+    }
+</script>
+
+</html>

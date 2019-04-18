@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+      <style>
+          body{
+            font-size: .14rem;
+          }
+          .wrap{
+
+          }
+          .wrap_head{
+            height: .53rem;
+            background:#F9F9F9;
+            color: #666666;
+            padding: .13rem 0 0 .15rem;
+          }
+          .email{
+            font-size: .16rem;
+            margin: .1rem 0 0 0;
+            color: #2A3145;
+          }
+          .form_box{
+            padding: 0 .15rem;
+          }
+          footer{
+            font-size: .18rem;
+            height: .25rem;
+            text-align: center;
+            margin: .5rem .15rem 0 .15rem;
+            padding: .1rem 1.36rem .1rem 1.37rem;
+            background: #376AFC;
+            color: #fff;
+            border-radius: .1rem;
+          }
+      </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="wrap_head">
+        <div>当前账号</div>
+        <div id="email"></div>
+      </div>
+      <div class="form_box">
+        <div class="input-t">
+            <label>验证码</label>
+            <input type="tel" placeholder="请输入您的验证码" id="code" style="width:60%">
+            <div class="sendCode" id="sendCode" tapmode >发送验证码</div>
+        </div>
+        <div class="input-t">
+            <label>新密码</label>
+            <input type="password" placeholder="请设置您的密码" id="pwd">
+            <div class="clear" tapmode onClick="fnClearInput(this)"></div>
+        </div>
+        <div class="input-t">
+            <label>设置密码</label>
+            <input type="password" placeholder="请设置您的密码" id="pwd2">
+            <div class="clear" tapmode onClick="fnClearInput(this)"></div>
+        </div>
+      </div>
+      <footer onclick="changePwd()">确认修改</footer>
+    </div>
+  </body>
+  <script type='text/template' id='emailTmpl'>
+    <div class="email">{{=it.name}}</div>
+  </script>
+  <script type="text/javascript" src="../script/zepto.min.js"></script>
+  <script type="text/javascript" src="../script/doT.min.js"></script>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/common.js"></script>
+  <script type="text/javascript">
+      apiready = function(){
+        let userInfo = $api.getStorage('userInfo');
+        // console.log(JSON.stringify(userInfo));
+        var emailTmpl = doT.template($api.dom('#emailTmpl').innerHTML);
+        $api.dom('#email').innerHTML = emailTmpl(userInfo);
+      };
+      function send() {
+        var geeTest = api.require('geeTest');
+        geeTest.openGTView({
+            api_1: 'http://webapi.geetest.com/apis/start-mobile-captcha/',
+            api_2: 'http://webapi.geetest.com/apis/mobile-server-validate/',
+            blurType: 'dark',
+            https: 'false'
+        }, function(ret, err) {
+            if (ret.status) {
+                /* Todo Your Code */
+                api.alert({
+                    title: '验证结果',
+                    msg: '验证成功',
+                    buttons: ['确定']
+                });
+
+            } else {
+
+                if (err.msg == '-100') {
+                    api.alert({
+                        title: '验证信息错误',
+                        msg: 'Invalid config params. Check Your Server/Client Config.',
+                        buttons: ['确定']
+                    });
+                } else if (err.msg == '-200') {
+                    api.alert({
+                        title: '验证不可用',
+                        msg: '极验服务不可用, 请使用备用验证',
+                        buttons: ['确定']
+                    });
+                } else if (err.msg == '-300') {
+                    api.alert({
+                        title: '验证关闭',
+                        msg: '用户关闭了验证',
+                        buttons: ['确定']
+                    });
+                } else if (err.msg == '-400') {
+                    api.alert({
+                        title: '验证结果',
+                        msg: '二次验证失败',
+                        buttons: ['确定']
+                    });
+                } else {
+                    api.alert({
+                        title: '验证异常',
+                        msg: err.msg,
+                        buttons: ['确定']
+                    });
+                }
+            }
+        });
+      }
+      $(function(){
+          $('input').focus(function(){
+            $(this).parent().siblings().find('.clear').hide();
+            $(this).parent().find('.clear').show();
+          })
+      })
+      function changePwd() {
+        let list = [$api.text($api.dom('.email')),$api.val($api.byId('code')),$api.val($api.byId('pwd')),$api.val($api.byId('pwd2'))]
+        if(list[1] == ''){
+          api.toast({  msg: '请输入验证码',});
+          return;
+        }
+        if(list[2] == ''){
+          api.toast({  msg: '请输入密码',});
+          return;
+        }
+        if(list[3] == ''){
+          api.toast({  msg: '请输入确认密码',});
+          return;
+        }
+        if(list[2] !== list[3]){
+          api.toast({  msg: '俩次输入的密码不一致',});
+          return;
+        }
+        getRequest('setLoginPassword','&loginPassword='+list[2]+'&type=2&address='+list[0]+'&code='+list[1],function(ret) {
+        })
+      }
+  </script>
+  </html>

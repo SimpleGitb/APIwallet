@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <style>
+          body{
+
+          }
+          .wrap{
+
+          }
+          .wrap_head{
+            font-size: .16rem;
+            color: #2A3145;
+            display: flex;
+            justify-content: space-between;
+          }
+          .wrap_left{
+            margin: .06rem 0 .15rem .65rem;
+          }
+          .wrap_right{
+            margin: .06rem .6rem .15rem 0;
+          }
+          .blank{
+            background: #F6F6F6;
+            height: 1px;
+          }
+          .row{
+            font-size: .14rem;
+            display: flex;
+            justify-content: space-between;
+          }
+          .row_left{
+            margin:.25rem 0 0 .41rem;
+            color: #666666;
+          }
+          .row_right{
+            margin: .25rem .6rem 0 0 ;
+          }
+          .row1{
+            margin-top: .12rem;
+          }
+      </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="wrap_head">
+        <div class="wrap_left">日期</div>
+        <div class="wrap_right">分红收益</div>
+      </div>
+      <div class="blank"></div>
+      <div class="row" id="history">
+
+      </div>
+    </div>
+  </body>
+  <script type='text/template' id='historyInTmpl'>
+    {{if( it && it.length>0){ }}
+      <div class="row_left row1">2019-03-06</div>
+      <div class="row_right row1">+2348 AIB</div>
+    {{ }else{ }}
+
+    {{ } }}
+  </script>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script src="../script/common.js"></script>
+  <script type="text/javascript" src="../script/doT.min.js"></script>
+  <script type="text/javascript">
+      apiready = function(){
+        getRequest('branch/getHistoryBonusLog','&page=1&pageSize=10',function (ret){
+          if(ret.flag ==true && ret){
+            console.log(JSON.stringify(ret.data));
+            let historyInTmpl = doT.template($api.byId('historyInTmpl').innerHTML);
+            $api.byId('history').innerHTML = historyInTmpl(ret.data);
+
+          }
+        })
+      };
+  </script>
+  </html>

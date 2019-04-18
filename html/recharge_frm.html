@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <style>
+          .blank{ height: .1rem; background: #F9F9F9;}
+          .adress{ font-size:.16rem; color:#2A3145; margin:.2rem 0 .2rem .15rem; }
+          .ethadress{width: 92%;height:auto;font-size: .14rem; color: #376AFC; margin: auto;word-wrap: break-word;}
+          .scan{ width: 1.6rem; height: 1.6rem; margin:.2rem auto; background: #ddd;}
+          .title{ font-size:.16rem; color: #2A3145; margin: .2rem 0 0 .15rem;}
+          .row2{ margin-top: .1rem;}
+          .row{ height: .75rem;font-size: .12rem; color: #BEBEBE;}
+          .row_t{ font-size:.15rem; color: #2D3143; padding: .2rem 0 0 .15rem; display: flex; justify-content: space-between;}
+          .row_r{ font-size:.2rem; color: #FF5656;margin-right: .15rem;}
+          .row_b{ display: flex; justify-content: space-between; margin:.08rem .15rem .17rem .15rem; }
+          .blank_2{ height: 1px; background:#F9F9F9; width: 96%; margin-left: 4%;}
+      </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="blank"></div>
+      <div class="wrap_top">
+        <div class="adress">您的AIB充值地址:</div>
+        <div class="ethadress" id="address">
+
+        </div>
+        <div class="scan" id="scanImg"></div>
+      </div>
+      <div class="blank"></div>
+      <div class="wrap_b">
+        <div class="title">充值记录</div>
+        <div class="row row2">
+          <div class="row_t">
+            <span class="row_l">充值</span>
+            <span class="row_r">+200</span>
+          </div>
+          <div class="row_b">
+            <span>2019/01/03 18:23</span>
+            <span>AIB</span>
+          </div>
+        </div>
+        <div class="blank_2"></div>
+        <div class="row">
+          <div class="row_t">
+            <span class="row_l">充值</span>
+            <span class="row_r">+200</span>
+          </div>
+          <div class="row_b">
+            <span>2019/01/03 18:23</span>
+            <span>AIB</span>
+          </div>
+        </div>
+        <div class="blank_2"></div>
+      </div>
+    </div>
+  </body>
+  <script type='text/template' id='addresstmpl'>
+    <span>{{= it.address }}</span>
+  </script>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/common.js"></script>
+  <script type="text/javascript" src="../script/zepto.min.js"></script>
+  <script type="text/javascript" src="../script/doT.min.js"></script>
+  <script type="text/javascript" src="../script/jquery.min.js"></script>
+  <script src="../script/qrcode.js"></script>
+  <script type="text/javascript">
+  var address;
+      apiready = function(){
+        address = $api.getStorage('userInfo').address;
+        console.log(JSON.stringify(address));
+        var qrcode = new QRCode(document.getElementById("scanImg"), {
+            width : 160,//设置宽高
+            height : 160
+        });
+        qrcode.makeCode(address);
+      };
+  </script>
+  </html>

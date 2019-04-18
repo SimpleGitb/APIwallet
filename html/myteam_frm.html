@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <style>
+          body{
+
+          }
+          .wrap{
+            display: flex;
+            flex-direction: column;
+          }
+          .row{
+            height: .7rem;
+            margin: .02rem .15rem;
+            display: flex;
+            flex-direction: row;
+          }
+          .blank{
+            height: .01rem;
+            margin-left: 1.01rem;
+            background: #F9F9F9;
+          }
+          img{
+            width: .26rem;
+            height: .2rem;
+            margin: .32rem 0 0 0;
+          }
+
+          .grade{
+            width: .26rem;
+            height: .2rem;
+            text-align: center;
+            line-height: .2rem;
+          }
+
+          .picture{
+            width: .4rem;
+            height: .4rem;
+            border-radius: 50%;
+            background: yellow;
+            margin: .21rem 0 0 .11rem;
+          }
+          .row_c{
+            font-size: .12rem;
+            color:#A5A5A5;
+            display: flex;
+            flex-direction: column;
+          }
+          .row_c_l{
+            font-size: .16rem;
+            margin: .23rem 0 0 .1rem;
+          }
+          .row_c_r{
+            margin: .07rem 0 0 .1rem;
+          }
+          .row_r{
+            font-size: .12rem;
+            color:#404249;
+            text-align: right;
+          }
+          .row_r_l{
+            margin: .23rem 0 0 .39rem;
+          }
+          .row_r_r{
+            margin: .07rem 0 0 .18rem;
+            color:#A5A5A5;
+          }
+          .wrap_h{
+            font-size: .16rem;
+            color: #404249;
+            width: .1rem;
+            height: .16rem;
+            margin: .3rem .08rem 0 .08rem;
+          }
+      </style>
+  </head>
+  <body>
+    <div class="wrap" id="myteam">
+
+    </div>
+  </body>
+  <script type='text/template' id='myteamTmpl'>
+    {{if( it && it.length>0 && it.length<4){ }}
+      {{ for(let k in it) { }}
+        <div class="row">
+          <img src="{{=it[k].img}}"/>
+          <div class="picture"></div>
+          <div class="row_c">
+            <div class="row_c_l">UID: {{=it[k].invitationCode}}</div>
+            <div class="row_c_r">活跃度:{{=it[k].subBranchCount}}</div>
+          </div>
+          <div class="row_r">
+            <div class="row_r_l">{{=it[k].mail}}</div>
+            <div class="row_r_r">注册日期：{{=it[k].createTime}}</div>
+          </div>
+        </div>
+        <div class="blank"></div>
+      {{ } }}
+    {{ }else if(it.length>4){ }}
+        <div class="row">
+          <span class="grade">{{= parseInt(k)+1 }}</span>
+          <div class="picture"></div>
+          <div class="row_c">
+            <div class="row_c_l">UID: {{=it[k].invitationCode}}</div>
+            <div class="row_c_r">活跃度:{{=it[k].subBranchCount}}</div>
+          </div>
+          <div class="row_r">
+            <div class="row_r_l">{{=it[k].mail}}</div>
+            <div class="row_r_r">注册日期：{{=it[k].createTime}}</div>
+          </div>
+        </div>
+        <div class="blank"></div>
+    {{ }else{ }}
+    {{ } }}
+  </script>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/common.js"></script>
+  <script type="text/javascript" src="../script/doT.min.js"></script>
+  <script type="text/javascript">
+      apiready = function(){
+        getRequest('branch/getSubBranchList','',function (ret){
+          if(ret.flag ==true && ret){
+            console.log(JSON.stringify(ret))
+            let value = ['../image/num1.png','../image/num2.png','../image/num3.png']
+
+            for (var i = 0; i < ret.data.length; i++) {
+              ret.data[i]["img"]=value[i];
+            }
+            console.log(JSON.stringify(ret.data));
+            let myteamTmpl = doT.template($api.byId('myteamTmpl').innerHTML);
+            $api.byId('myteam').innerHTML = myteamTmpl(ret.data);
+          }
+        })
+      };
+  </script>
+  </html>

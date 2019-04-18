@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <style>
+          html{
+            background: rgba(0,0,0,.4);
+          }
+          body{
+            background: none;
+          }
+          .wrap{
+            position: relative;
+            width: 68%;
+            background: #fff;
+            margin:1.95rem auto 0 auto;
+            display: flex;
+            flex-direction: column;
+            border-radius: .06rem;
+            padding: .3rem .15rem .2rem;
+           }
+           .close {
+             position: absolute;
+             right: .04rem;
+             top: .04rem;
+             width: .26rem;
+             height: .26rem;
+             text-align: center;
+             line-height: .26rem;
+             z-index: 2;
+          }
+
+          .close span {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: url("../image/close.png") center no-repeat;
+            background-size: .18rem .18rem;
+          }
+          .wrap_center{
+            font-size: .16rem;
+            text-align: center;
+            color:#414758;
+            padding-bottom: .16rem;
+          }
+
+          .pwd-box{
+        	    position: relative;
+        	    border: 1px solid #F6F6F6;
+        	    border-radius: 3px;
+        	}
+        	.pwd-box input[type="tel"]{
+        		  width: 99%;
+        	    height: 45px;
+        	    color: transparent;
+        	    position: absolute;
+        	    top: 0;
+        	    left: 0;
+        	    border: none;
+              outline: none;
+        	    font-size: 18px;
+        	    opacity: 0;
+        	    z-index: 1;
+        	    letter-spacing: 35px;
+        	}
+          .fake-box{
+            display: flex;
+            height: 45px;
+          }
+        	.fake-box input{
+        		  width: 16.66%;
+        	    height: 45px;
+        	    border: none;
+        	    border-right: 1px solid #F6F6F6;
+        	    text-align: center;
+        	    font-size: 26px;
+              outline: none;
+        	}
+        	.fake-box input:nth-last-child(1){
+        		border:none;
+        	}
+
+      </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="close" onclick="closePwd()"><span></span></div>
+      <div class="wrap_center">请输入您的资金密码</div>
+
+      <div class="pwd-box">
+      	<input type="tel" maxlength="6" class="pwd-input" id="pwd-input">
+      	<div class="fake-box">
+      		<input type="password" readonly="">
+      		<input type="password" readonly="">
+      		<input type="password" readonly="">
+      		<input type="password" readonly="">
+      		<input type="password" readonly="">
+      		<input type="password" readonly="">
+      	</div>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/zepto.min.js"></script>
+  <script type="text/javascript" src="../script/common.js"></script>
+  <script type="text/javascript">
+
+      apiready = function(){
+        let buypwd = $api.getStorage('password');
+        var emalipay = api.pageParam.emalipay;
+        // return;
+        console.log(JSON.stringify(emalipay))
+        var $input = $(".fake-box input");
+        $("#pwd-input").focus();
+        $("#pwd-input").on("input", function() {
+          var pwd = $(this).val().trim();
+          for (var i = 0, len = pwd.length; i < len; i++) {
+            $input.eq("" + i + "").val(pwd[i]);
+          }
+          $input.each(function() {
+            var index = $(this).index();
+            if (index >= len) {
+              $(this).val("");
+            }
+          });
+          if (len == 6) {
+            if(pwd == buypwd){
+              api.execScript({
+                  frameName: 'buyDetail_frm',
+                  script: 'payCallback('+ pwd + ','+emalipay +');'
+              });
+              api.closeFrame();
+            }else{
+              api.toast({msg: '输入密码错误',});
+              api.closeFrame();
+            }
+          }
+        });
+      }
+      function closePwd(){
+          api.closeFrame();
+      }
+      // function payCallback(pwd,code){
+      //   postRequest('getAeskey',{accessToken:token},function (ret) {
+      //     if(ret.flag == true){
+      //       key =ret.data;
+      //       console.log(key);
+      //       var keyval = CryptoJS.enc.Utf8.parse(key);
+      //       console.log(keyval);
+      //       var plaintText = list[2];
+      //       var iv   = CryptoJS.enc.Latin1.parse('ed16b1f8a9e648d4');
+      //       var encryptedData = CryptoJS.AES.encrypt(plaintText, keyval, {
+      //           iv:iv,
+      //           mode: CryptoJS.mode.CBC,
+      //           padding: CryptoJS.pad.Pkcs7
+      //       });
+      //       enced = CryptoJS.enc.Base64.stringify(encryptedData.ciphertext);
+      //       console.log(enced);
+      //       postRequest('task/buyScroll',{
+      //           rank: api.pageParam.rank,
+      //           pwd:enced,
+      //           inviteCode:code
+      //       },function(ret){
+      //         if (ret && ret.flag && ret.data) {
+      //           api.sendEvent({
+      //               name: 'upDateScroll'
+      //           });
+      //           api.closeWin();
+      //         } else {
+      //           api.toast({ msg: ret.errMsg });
+      //         }
+      //       })
+      //     }
+      //   }
+      // }
+  </script>
+  </html>

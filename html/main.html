@@ -1,71 +1,152 @@
-<!DOCTYPE HTML>
+<!doctype html>
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
-    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
-    <title>Hello APP</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>AI工场</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <style>
-        label {
-            margin: 10px;
-            font-size: 24px;
+        #footer {
+            background-color: #fff;
         }
 
-        ul {
-            margin-bottom: 10px;
+        #footer ul li {
+            padding-top: 34px;
+            padding-bottom: 6px;
+            font-size: 10px;
+            background: url() no-repeat center 6px;
+            text-align: center;
+            color:#B8BCC8;
         }
 
-        ul li {
-            margin: 5px 10px;
-            padding: 5px;
-            color: #000;
-            word-wrap: break-word;
+        #footer ul li.active {
+            color: #4877FA;
+        }
+
+        #footer ul li:nth-child(1) {
+            background-image: url(../image/icon-nav1.png);
+            background-position: center 9px;
+            background-size: 24px auto;
+        }
+
+        #footer ul li:nth-child(2) {
+            background-image: url(../image/icon-nav2.png);
+            background-position: center 7px;
+            background-size: 20px auto;
+        }
+
+        #footer ul li:nth-child(3) {
+            background-image: url(../image/icon-nav3.png);
+            background-size: 24px auto;
+        }
+
+        #footer ul li:nth-child(4) {
+            background-image: url(../image/icon-nav4.png);
+            background-size: 20px auto;
+        }
+
+        #footer ul li:nth-child(1).active {
+            background-image: url(../image/icon-nav1on.png);
+        }
+
+        #footer ul li:nth-child(2).active {
+            background-image: url(../image/icon-nav2on.png);
+        }
+
+        #footer ul li:nth-child(3).active {
+            background-image: url(../image/icon-nav3on.png);
+        }
+
+        #footer ul li:nth-child(4).active {
+            background-image: url(../image/icon-nav4on.png);
+        }
+
+        .flex-con {
+            overflow: auto
         }
     </style>
 </head>
 
 <body>
-    <label>Hello APP</label>
-    <div id='sys-info'></div>
+    <div id="wrap" class="flex-wrap flex-vertical">
+
+        <div id="main" class="flex-con">
+
+        </div>
+        <div id="footer" class="border-t">
+            <ul class="flex-wrap">
+                <li tapmode="hover" onclick="randomSwitchBtn(this)" class="flex-con active">AI工场</li>
+                <li tapmode="hover" onclick="randomSwitchBtn(this)" class="flex-con">节点</li>
+                <li tapmode="hover" onclick="randomSwitchBtn(this)" class="flex-con">钱包</li>
+                <li tapmode="hover" onclick="randomSwitchBtn(this)" class="flex-con">我的</li>
+            </ul>
+        </div>
+    </div>
 </body>
-<script type="text/javascript" src="../script/api.js"></script>
-<script type="text/javascript">
-    apiready = function() {
-        var ver = api.version;
-        var sType = api.systemType;
-        var sVer = api.systemVersion;
-        var id = api.deviceId;
-        var model = api.deviceModel;
-        var name = api.deviceName;
-        var cType = api.connectionType;
-        var winName = api.winName;
-        var winWidth = api.winWidth;
-        var winHeight = api.winHeight;
-        var frameName = api.frameName || '';
-        var frameWidth = api.frameWidth || '';
-        var frameHeight = api.frameHeight || '';
-
-        var str = '<ul>';
-        str += '<li>引擎版本信息: ' + ver + '</li>';
-        str += '<li>系统类型: ' + sType + '</li>';
-        str += '<li>系统版本: ' + sVer + '</li>';
-        str += '<li>设备标识: ' + id + '</li>';
-        str += '<li>设备型号: ' + model + '</li>';
-        str += '<li>设备名称: ' + name + '</li>';
-        str += '<li>网络状态: ' + cType + '</li>';
-        str += '<li>主窗口名字: ' + winName + '</li>';
-        str += '<li>主窗口宽度: ' + winWidth + '</li>';
-        str += '<li>主窗口高度: ' + winHeight + '</li>';
-        str += '<li>子窗口名字: ' + frameName + '</li>';
-        str += '<li>子窗口宽度: ' + frameWidth + '</li>';
-        str += '<li>子窗口高度: ' + frameHeight + '</li>';
-        str += '</ul>';
-
-        $api.byId('sys-info').innerHTML = str;
-
-    };
-</script>
 
 </html>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        funIniGroup()
+
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err){});
+    }
+
+
+
+    function funIniGroup() {
+        var eFootLis = $api.domAll('#footer li'),
+            frameNames = ['home', 'node', 'wallet', 'my'],
+            frames = [];
+        for (var i = 0, len = eFootLis.length; i < len; i++) {
+            frames.push({
+                name: frameNames[i],
+                url: frameNames[i] + '.html',
+                bgColor: 'rgba(0,0,0,.2)',
+                bounces: false
+            })
+        }
+        api.openFrameGroup({
+            name: 'group',
+            scrollEnabled: false,
+            slidBackEnabled: false,
+            rect: {
+                x: 0,
+                y: 0,
+                w: api.winWidth,
+                h: $api.dom('#main').offsetHeight
+            },
+            index: 0,
+            frames: frames
+        }, function(ret, err) {
+
+        });
+    }
+
+    // 随意切换按钮
+    function randomSwitchBtn(tag) {
+        if( tag == $api.dom('#footer li.active') )return;
+        var eFootLis = $api.domAll('#footer li'),
+            index = 0;
+        for (var i = 0,len = eFootLis.length; i < len; i++) {
+            if( tag == eFootLis[i] ){
+                index = i;
+            }else{
+                $api.removeCls(eFootLis[i], 'active');
+            }
+        }
+        $api.addCls( eFootLis[index], 'active');
+        api.setFrameGroupIndex({
+            name: 'group',
+            index: index
+        });
+    }
+
+</script>

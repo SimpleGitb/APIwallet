@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <style>
+          body{
+
+          }
+          .row{
+            width: 100%;
+            height: .55rem;
+            font-size: .12rem;
+          }
+          .row span:nth-child(2n+1){
+            margin-left: .15rem;
+          }
+          .row span:nth-child(2n){
+            margin-right: .15rem;
+          }
+          .row_t{
+            display: flex;
+            justify-content: space-between;
+            margin-top: .2rem;
+          }
+          .row_t2{
+            margin-top: .1rem;
+          }
+          .row_t span:nth-child(2n+1){
+            font-size: .15rem;
+          }
+          .row_t span:nth-child(2n){
+            font-size: .2rem;
+            color: #FF5656;
+          }
+          .row_b{
+            color: #BEBEBE;
+            display: flex;
+            justify-content: space-between;
+            margin-top: .08rem;
+          }
+          .blank{
+            height: 1px;
+            background: #F9F9F9;
+            margin-left: .15rem;
+          }
+      </style>
+  </head>
+  <body>
+    <div class="wrap" id="moneyRecord">
+
+    </div>
+  </body>
+  <script type='text/template' id='moneyRecordTmpl'>
+    {{if( it && it.length>0){ }}
+      {{ for(let k in it) { }}
+        <div class="row">
+          <div class="row_t row_t2">
+            <span>提现</span>
+            <span>-{{=toThousands(it[k].amount)}}</span>
+          </div>
+          <div class="row_b">
+            <span>2019/03/03 15:23</span>
+            <span>AIB</span>
+          </div>
+        </div>
+        <div class="blank"></div>
+      {{ } }}
+    {{ }else{ }}
+
+    {{ } }}
+  </script>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/common.js"></script>
+  <script type="text/javascript" src="../script/doT.min.js"></script>
+  <script type="text/javascript">
+      apiready = function(){
+        userInfo = $api.getStorage('userInfo');
+        postRequest('getTransactionRecordList',{accessToken: userInfo.token,},function(ret) {
+          if(ret.flag ==true && ret){
+            console.log(JSON.stringify(ret.data))
+            let moneyRecordTmpl = doT.template($api.byId('moneyRecordTmpl').innerHTML);
+            $api.byId('moneyRecord').innerHTML = moneyRecordTmpl(ret.data.rows);
+          }
+        })
+      };
+  </script>
+  </html>

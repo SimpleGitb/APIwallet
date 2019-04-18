@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>AI工厂</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/swiper.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/unite.css"/>
+    <style>
+        html,body{
+            background: #F5F5F5;
+            height: 100%;
+        }
+        #home {
+          height: 100%;
+        }
+        #header {
+            height: 2rem;
+            background: #376AFC;
+            color: #FFFFFF;
+        }
+
+        #header .nav {
+            color:#fff;
+        }
+
+        .wrap_title {
+            margin-top: .3rem;
+            padding: 0 .15rem;
+            text-align: center;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .wrap_title > div{
+            width: 50%;
+        }
+
+        .wrap_title .tit {
+            font-size: 0.12rem;
+        }
+
+        .wrap_title .info {
+            font-size: 0;
+            margin-top: .02rem;
+            vertical-align: bottom;
+        }
+
+        .wrap_title .info .big{
+            font-size: 0.26rem;
+        }
+
+        .wrap_title .info .small{
+            font-size: 0.15rem;
+        }
+
+        .wrap {
+            position: absolute;
+            width: 92%;
+            bottom: .2rem;
+            left: 4%;
+            background: #fff;
+            border-radius: .26666rem;
+        }
+
+        .contain_head {
+            position: relative;
+            padding:.14rem 0 .12rem;
+            margin: 0 .14rem;
+            font-size: 0.12rem;
+            border-bottom: #F9F9F9 solid 1px;
+            margin-bottom: .15rem;
+            text-align: center;
+            line-height: .22rem
+        }
+        .contain_head_l {
+            position: absolute;
+            left:0;
+            top: .14rem;
+            padding: 0 .12rem;
+            height: .22rem;
+            text-align: center;
+            color: #376AFC;
+            background: #DFE7FF;
+            border-radius: .1rem .1rem .1rem 0;
+        }
+        .contain_head_c {
+            font-size: .16rem;
+        }
+        .contain_head_r {
+            position: absolute;
+            right:0;
+            top: .14rem;
+            color: #2D3143;
+        }
+        .swiper-slide {
+          overflow: hidden;
+        }
+        .question {
+            padding: 0 .15rem;
+            overflow-y:auto;
+        }
+        .contain_title {
+          font-size: .16rem;
+          line-height: .22rem;
+        }
+        span.toast{
+            width: 80%;
+            margin-left:10%;
+            text-align: center;
+            margin-top: .24rem;
+        }
+        .row {
+            padding:.2rem 0 0 .26rem;
+            position: relative;
+            color:#2D3143;
+        }
+        .row span {
+            font-size: 0.16rem;
+            line-height: .2rem;
+        }
+        .active {
+            color: #376AFC;
+        }
+
+        .check {
+            position: absolute;
+            left:0;
+            top:.21rem ;
+            width: .16rem;
+            height: .16rem;
+            background:url("../image/check.png") center no-repeat;
+            background-size: 100% 100%;
+        }
+
+        .active .check {
+            background-image: url("../image/check_on.png");
+        }
+
+        .contain_footer {
+            padding:.1rem 0.15rem .4rem;
+        }
+        .image {
+            width: 2rem;
+            min-height: 1.4rem;
+            border: 1px #E2E2E2 solid;
+            border-radius: 5px;
+            margin: .1rem auto 0;
+        }
+        .image img {
+          width: 100%;
+          min-height: 1.4rem;
+          display: block;
+        }
+        .audio{
+          width: 80%;
+          height: auto;
+        }
+        .toast {
+            width: 1.68rem;
+            height: 14px;
+            color: #8F8F8F;
+            font-size: 0.12rem;
+            margin-left: 0.69rem;
+            margin-top: 0.34rem;
+        }
+        .audio {
+            background: #fff;
+            margin-top: 0.14rem;
+        }
+        .result_title {
+          padding: .3rem 0 .2rem;
+          text-align: center;
+          font-size: .22rem;
+        }
+        .result_title span {
+          display: block;
+          font-size: .16rem;
+          color: #9B9B9B;
+        }
+        .result_list {
+          padding: 0 0.15rem;
+          margin-bottom:.4rem;
+        }
+        .result_list li {
+          position: relative;
+          margin-bottom: .1rem;
+          padding: 0 .15rem;
+          height: .64rem;
+          font-size: .22rem;
+          line-height: .64rem;
+          text-align: right;
+          box-shadow:0 0 .08rem 0 rgba(242,242,242,1);
+          border-radius:.06rem;
+        }
+        .result_list li .result_l {
+          position: absolute;
+          left: .15rem;
+          top: 0;
+          font-size: .15rem;
+          text-align: left;
+        }
+        .selectlabel{
+          margin: auto;
+          text-align: center;
+          margin-top: .44rem;
+          height: 50px;
+        }
+        textarea{
+          width: 100%;
+          padding: 10px;
+          border: 1px solid #E6E6E6;
+          box-sizing: border-box;
+          margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+  <div id="home" >
+      <div id="header">
+          <div class="nav">AI工场</div>
+          <div class="wrap_title">
+              <div class="title_box">
+                  <div class="tit">当月累计收益</div>
+                  <div class="info">
+                      <span class="big" id="monthReward">0</span>
+                      <span class="small">AIB</span>
+                  </div>
+              </div>
+              <div class="title_box">
+                  <div class="tit">历史正确率</div>
+                  <div class="info">
+                    <span class="big" id="historyAccuracy">0</span>
+                    <span class="small">%</span>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="wrap">
+          <div class="swiper-container">
+              <div class="swiper-wrapper" id="conditionals">
+                <div class="swiper-slide questH" id="todaySummary"></div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <script id="containTmpl" type="text/template">
+    {{ for(let k in it) { }}
+      {{ if(!it[k].answer || it[k].answer == null || it[k].answer == "null"){ }}
+      <div class="swiper-slide">
+        <div class="contain_head">
+          <span class="contain_head_l">{{= parseInt(k)+1 }}/{{= it.length }}</span>
+          <span class="contain_head_c">第{{= rp(parseInt(k)+1) }}题</span>
+          <span class="contain_head_r">价值:{{= it[k].bonus }}AIB</span>
+        </div>
+        <div class="question">
+          {{ if(it[k].taskType == '1'){ }}
+            {{ if(it[k].taskMedia || it[k].taskMedia != null){ }}
+            <p class="contain_title"><span class="taskmatch">{{= parseInt(k)+1 }}.{{= taskMatch(it[k].taskMedia)}}</span>{{= taskpicMatch(it[k].taskDes)}}</p>
+            {{ }else{ }}
+            <p class="contain_title">{{= parseInt(k)+1 }}.{{= taskpicMatch(it[k].taskDes)}}</p>
+            {{ } }}
+          {{ }else{ }}
+            <p class="contain_title">{{= parseInt(k)+1 }}.{{= taskpicMatch(it[k].taskDes)}}</p>
+          {{ } }}
+          {{ if(it[k].taskType == '2'){ }}
+          <div class="audio">
+            <audio src="{{= it[k].taskMedia }}" controls="controls">
+              Your browser does not support the audio tag.
+            </audio>
+          </div>{{ } }}
+          {{ if(it[k].taskType == '3'){ }}
+          <div class="image"><img src="{{= it[k].taskMedia }}" /></div>
+          {{ } }}
+          {{ if(it[k].answerType == '1'){ }}
+            {{ for(let i in it[k].options) { }}
+              <div class="row" tapmode onclick="check(this)">
+                <div class="check"></div><span>{{= maskText(it[k].options[i])}}</span>
+              </div>
+            {{ } }}
+          {{ } }}
+          {{ if(it[k].answerType == '2'){ }}
+            <div>
+              <textarea rows="13" placeholder="请输入您听的内容"></textarea>
+            </div>
+          {{ } }}
+          {{ if(it[k].answerType == '3'){ }}
+            <div class="selectlabel" id="selectlabel" tapmode onclick="selectLabel()">{{= selectLabeltext()}}</div>
+          {{ } }}
+
+        </div>
+        <div class="contain_footer">
+          <div class="swiper-next btn" tapmode onclick="router('{{= it[k].taskId }}','{{= it[k].scrollId }}','{{= parseInt(k)+1 }}')">确认</div>
+        </div>
+      </div>
+      {{ } }}
+    {{ } }}
+  </script>
+  <script id="Tmpl" type="text/template">
+    <div class="swiper-slide questH">
+        <div class="">暂无题目，请前往卷轴中心购买卷轴</div>
+    </div>
+  </script>
+  <script id="todayTmpl" type="text/template">
+    <div class="result_title">今日题目已答完<span>请休息一下吧</span></div>
+    <ul class="result_list">
+        <li>
+            <span class="result_l">今日收益(AIB)</span>
+            <span class="result_r">{{= it.todayReward }}</span>
+        </li>
+        <li>
+            <span class="result_l">今日准确率</span>
+            <span class="result_r">{{= parseFloat(it.todayAccuracy) * 100 }}%</span>
+        </li>
+        <li>
+            <span class="result_l">卷轴道数(道)</span>
+            <span class="result_r">{{= it.scrollRemain }}</span>
+        </li>
+    </ul>
+    <div class="contain_footer">
+      <div class="btn" tapmode onclick='Cathistory()'>查看历史</div>
+    </div>
+  </script>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/zepto.min.js"></script>
+<script type="text/javascript" src="../script/doT.min.js"></script>
+<script type="text/javascript" src="../script/swiper.min.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script>
+let summary,
+    questionL = 0,values;
+var myMap = new Map();
+var myMapval = new Map();
+var picTag = new Map();
+var picTagval = new Map();
+var picName = [];
+apiready = function () {
+  fnReady()
+  getHistory()
+  getRequest('question/getTagConfig','',function(ret){
+    var textTag = ret.data.textTag;
+    var picData = ret.data.picTag;
+    for(var tag in textTag){
+      myMap.set(textTag[tag].tag, textTag[tag].name);
+      myMapval.set(textTag[tag].name, textTag[tag].tag);
+    }
+    for(var tag in picData){
+      picTag.set(picData[tag].tag, picData[tag].name);
+      picTagval.set(picData[tag].name, picData[tag].tag);
+      picName.push(picData[tag].name);
+    }
+    // myMap.set("key", "value");
+    // console.log(JSON.stringify(picTag.get('/m/011k07')))
+    // console.log(JSON.stringify(picName))
+    getRequest('question/getQuestion','',function(ret){
+      if(ret.data && ret.data.length > 0){
+          questionL = ret.data.length;
+          let conditionals = doT.template($api.dom('#containTmpl').innerHTML);
+          $("#todaySummary").before(conditionals(ret.data));
+          // console.log(JSON.stringify(ret.data));
+      } else {
+          // 无数据
+          let Tmpl = doT.template($api.dom('#Tmpl').innerHTML);
+          $api.dom('#conditionals').innerHTML = Tmpl(ret.data);
+      }
+
+      api.parseTapmode();
+      // 计算题目盒子高度
+      $('.question').height($("#home").height() - $('#header').height() - $('.contain_footer').height() - 30)
+      $('.questH').height($("#home").height() - $('#header').height() + 27)
+      fnChange()
+
+    })
+  })
+  api.addEventListener({
+      name: 'myEvent'
+  }, function(ret, err) {
+      if(ret.value){
+        $api.dom('#selectlabel').innerHTML = ret.value.msg;
+        // console.log(JSON.stringify(ret.value.msg));
+        selectLabeltext(ret.value.msg)
+      }
+  });
+  api.addEventListener({
+      name: 'upDateScroll'
+  }, function(ret, err) {
+      location.reload()
+  });
+}
+var maskText = function(text) {
+    if(text.slice(0,1) == '/'){
+      var textsplice = text.split(";")
+      text = "";
+      for(let i=0;i< textsplice.length;i++){
+        text += myMap.get(textsplice[i])+";";
+      }
+    }else {
+      text = text;
+    }
+    return text;
+  };
+var picNameOption = function(){
+  let text = picName;
+  return text;
+};
+var selectLabeltext = function(){
+  var text;
+  if(api.pageParam.name){
+    text = api.pageParam.name;
+  }else {
+    text = "请选择标签";
+  }
+  return text;
+}
+var taskMatch = function(val){
+  var text;
+  var picmat = val.match(/\/m\/[0-9a-zA-Z_]{1,}/g);
+  if(picmat != null){
+    for(let i=0;i< picmat.length;i++){
+      text = val.replace(picmat[i],picTag.get(String(picmat[i])));
+      val = text;
+    }
+  }else {
+    text = val;
+  }
+  var text = val.match(/\/I(\S*?)\/I/g);
+  // console.log(val.match(/\/I(\S*?)\/I/g))
+  var tempHTML;
+  for(var t = 0;t<text.length;t++){
+    var replaceText = "<font style='background:#FFFF00;color:#000'>"+text[t]+"</font>";
+    tempHTML = val.replace(text[t], replaceText);
+    val = tempHTML;
+  }
+  // console.log(tempHTML.replace(/\/I/g,""));
+  // setTimeout(function(){
+  //   $('.taskmatch2').html(tempHTML);
+  // },500)
+  return tempHTML.replace(/\/I/g,"");
+}
+var taskpicMatch = function(picVal){
+  var text;
+  var r = picVal.match(/\/m\/[0-9a-zA-Z_]{1,}/g);
+  if(r != null){
+    for(let i=0;i< r.length;i++){
+      text = picVal.replace(r[i],picTag.get(String(r[i])));
+      picVal = text;
+    }
+  }else {
+    text = picVal;
+  }
+  return text;
+};
+// 获取历史记录
+function getHistory(callback){
+  getRequest('question/todaySummary','',function(ret){
+    if(ret && ret.flag){
+      $api.dom('#monthReward').innerHTML = ret.data.monthReward
+      $api.dom('#historyAccuracy').innerHTML = (parseFloat(ret.data.historyAccuracy) * 100).toFixed(2);
+      let todayTmpl = doT.template($api.dom('#todayTmpl').innerHTML);
+      $api.dom('#todaySummary').innerHTML = todayTmpl(ret.data)
+      if (typeof callback == 'function') {
+          callback();
+      }
+    }else{
+      api.toast({ msg: ret.errMsg });
+    }
+  })
+}
+
+// 答案选择
+function check(that){
+    $('.row').removeClass('active')
+    $(that).addClass('active')
+}
+
+// 初始化Swiper
+var mySwiper;
+function fnChange() {
+  mySwiper = new Swiper('.swiper-container', {
+    allowSlideNext : false,
+    allowSlidePrev : false,
+    navigation: {
+      nextEl: '.swiper-next',
+    },
+    on:{
+      slideNextTransitionEnd: function(){
+        this.allowSlideNext = false
+      },
+    }
+  })
+}
+
+// 切换下一题
+function nextQuestion(){
+    mySwiper.allowSlideNext = true
+    mySwiper.slideNext();
+    $('.row').removeClass('active');
+    if($api.dom('#selectlabel')){
+      $api.dom('#selectlabel').innerHTML = "请选择标签";
+    }
+    $('textarea').val('');
+}
+
+// 提交答案
+function router(taskId,scrollId,index){
+  let answer = $('.active').find('span').html();
+  let answer2 = $('#selectlabel').html();
+  let answer3 = $('textarea').val();
+  var answerSumit;
+  if(answer2 == "请选择标签"){
+    answer2 = ""
+  }
+  if(answer2 == null){
+    answer2 = ""
+  }
+  if (answer || answer2 || answer3){
+    if(answer2){
+      answerSumit =answer2;
+    }
+    if(answer){
+      answerSumit =answer;
+    }
+    if(answer3){
+      answerSumit =answer3;
+    }
+    console.log(answerSumit)
+    answerSumit = answerSumit.split(";");
+    if(answerSumit.length>1){
+      var answerSumitTip = "";
+      for(var t=0;t< answerSumit.length-1;t++){
+        answerSumitTip += myMapval.get(String(answerSumit[t]))+";";
+        // console.log(myMapval.get(String(answerSumit[t])))
+      }
+      answerSumit = answerSumitTip;
+    }else {
+      if(picTagval.get(String(answerSumit))){
+        answerSumit = picTagval.get(String(answerSumit));
+      }
+      if(myMapval.get(String(answerSumit))){
+        answerSumit = myMapval.get(String(answerSumit));
+      }
+    }
+
+    console.log(answerSumit);
+    postRequest('question/submitAnswer',{
+        taskId: taskId,
+        scrollId: scrollId,
+        answer: answerSumit
+    },function(ret){
+      if (ret && ret.flag) {
+        if(questionL == index){
+          getHistory(nextQuestion())
+        } else {
+          nextQuestion()
+        }
+      } else {
+        api.toast({ msg: ret.errMsg });
+      }
+    })
+  } else {
+    api.toast({ msg: '您还未选择答案' });
+  }
+}
+
+// 查看历史
+function Cathistory() {
+  api.openWin({
+      name: 'history_win',
+      url: './history_win.html',
+  });
+}
+
+function rp (n) {
+    let cnum = ['零','一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
+    let s = '';
+    n = '' + n; // 数字转为字符串
+    for (let i = 0; i < n.length; i++) {
+        s += cnum[parseInt(n.charAt(i))];
+    }
+    if (s.length == 2) { // 两位数的时候
+        // 如果个位数是0的时候，令改成十
+        if (s.charAt(1) == cnum[0]) {
+            s = s.charAt(0) + cnum[10];
+            // 如果是一十改成十
+            if (s == cnum[1] + cnum[10]) {
+                s = cnum[10]
+            }
+        } else if (s.charAt(0) == cnum[1]) {
+            // 如果十位数是一的话改成十
+            s = cnum[10] + s.charAt(1);
+        }
+    }
+    return s;
+}
+function selectLabel(){
+  api.openWin({
+      name: 'home_selectlabel',
+      url: './home_selectlabel.html',
+  });
+}
+</script>
+</html>
