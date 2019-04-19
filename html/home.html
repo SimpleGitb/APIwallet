@@ -290,7 +290,7 @@
           {{ } }}
           {{ if(it[k].answerType == '2'){ }}
             <div>
-              <textarea placeholder="请输入您听的内容"></textarea>
+              <textarea class="textarea" placeholder="请输入您听的内容"></textarea>
             </div>
           {{ } }}
           {{ if(it[k].answerType == '3'){ }}
@@ -332,7 +332,7 @@
   </script>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
-<script type="text/javascript" src="../script/zepto.min.js"></script>
+<script type="text/javascript" src="../script/jquery.min.js"></script>
 <script type="text/javascript" src="../script/doT.min.js"></script>
 <script type="text/javascript" src="../script/swiper.min.js"></script>
 <script type="text/javascript" src="../script/common.js"></script>
@@ -506,20 +506,25 @@ function fnChange() {
 
 // 切换下一题
 function nextQuestion(){
-    mySwiper.allowSlideNext = true
-    mySwiper.slideNext();
-    $('.row').removeClass('active');
-    if($api.dom('#selectlabel')){
-      $api.dom('#selectlabel').innerHTML = "请选择标签";
-    }
-    $('textarea').val('');
+  $('.row').removeClass('active');
+  if($api.dom('#selectlabel')){
+    $api.dom('#selectlabel').innerHTML = "请选择标签";
+  }
+  $('.textarea').val('');
+  mySwiper.allowSlideNext = true
+  mySwiper.slideNext();
 }
 
 // 提交答案
 function router(taskId,scrollId,index){
   let answer = $('.active').find('span').html();
   let answer2 = $('#selectlabel').html();
-  let answer3 = $('textarea').val();
+  let answer3 = "";
+  $('.textarea').each((i,v)=>{
+    answer3 = ($(v).val()?$(v).val():answer3);
+    $(v).val('');
+  });
+  console.log(answer3)
   var answerSumit;
   if(answer2 == "请选择标签"){
     answer2 = ""

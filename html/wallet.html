@@ -150,7 +150,7 @@
           for(var i = 0;i<ret.data.length;i++){
             if(ret.data[i].currency == "AIB"){
               if(typeof ret.data[i].freezeAmount == 'number' ){
-                acountcost = ret.data[i].amount-ret.data[i].freezeAmount
+                acountcost = Number(ret.data[i].amount)-Number(ret.data[i].freezeAmount)
               }else {
                 acountcost = ret.data[i].amount;
               }

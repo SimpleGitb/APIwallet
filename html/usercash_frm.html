@@ -105,26 +105,36 @@
           api.toast({msg:'请输入您的转账数量'});
           return;
         }
-        if($api.getStorage('password')){
+        postRequest('exitsPassword',{accessToken:userInfo.token},function(ret) {
+          if(ret.data == true){
+            paymethod()
+          }else {
+            api.confirm({
+                title: '提示',
+                msg: '未设置资金密码，是否去设置？',
+                buttons: ['确定', '取消']
+            }, function(ret, err) {
+                // var index = ret.buttonIndex;i
+                if(ret.buttonIndex=="1"){
+                  api.openWin({
+                      name: 'funds_win',
+                      url: './funds_win.html'
+                  });
+                }else {
+                  api.toast({msg: '未设置资金密码无法转账',});
+                }
+            });
+          }
+        })
+    }
 
-        }else {
-          api.confirm({
-              title: '提示',
-              msg: '未设置资金密码，是否去设置？',
-              buttons: ['确定', '取消']
-          }, function(ret, err) {
-              // var index = ret.buttonIndex;i
-              if(ret.buttonIndex=="1"){
-                api.openWin({
-                    name: 'funds_win',
-                    url: './funds_win.html'
-                });
-              }else {
-                api.toast({msg: '未设置资金密码无法转账',});
-              }
-          });
-          return;
+    function paymethod(){
+      $('body').on('touchend', function(el) {
+        if(el.target.tagName != 'INPUT') {
+          $('input').blur()
         }
+      })
+      setTimeout(function(){
         api.openFrame({
             name: 'pwd4',
             url: './pwd4.html',
@@ -134,13 +144,10 @@
                 w: api.winWidth,
                 h: api.winHeight,
             },
-            // pageParam:{
-            //     emalipay:emalipay.fecth.invitationCode
-            // },
             bounces: false,
             bgColor: 'rgba(255,255,255,.2)',
         });
-
+      },200);
     }
     function payCallback(pwd){
       // console.log(String(pwd));

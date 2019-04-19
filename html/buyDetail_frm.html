@@ -409,7 +409,10 @@ let user,token,key,enced,costNum;
         api.toast({ msg: '请先选择用户' });
         return;
       }
-        console.log($api.getStorage('password'));
+      postRequest('exitsPassword',{accessToken:token},function(ret) {
+        console.log(JSON.stringify(ret));
+      })
+      return;
         if($api.getStorage('password')){
           console.log($api.getStorage('password'))
         }else {

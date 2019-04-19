@@ -37,7 +37,7 @@
         <div class="ethadress"><input id="CashAddress" placeholder="请输入AIB提现地址"></div>
         <div class="blank_3"></div>
         <div class="adress">请输入您的提现数量（当前手续费 <span id="handfee">0%</span>）</div>
-        <div class="ethadress"><input id="tocashnum" placeholder="请输入您的提现数量"></div>
+        <div class="ethadress"><input type="tel" id="tocashnum" placeholder="请输入您的提现数量"></div>
         <div class="blank_3"></div>
         <div class="btn" onclick="toCash()">确认提现</div>
       </div>
@@ -109,46 +109,48 @@
           api.toast({msg:'请输入您的提现数量'});
           return;
         }
-        if($api.getStorage('password')){
-
-        }else {
-          api.confirm({
-              title: '提示',
-              msg: '未设置资金密码，是否去设置？',
-              buttons: ['确定', '取消']
-          }, function(ret, err) {
-              // var index = ret.buttonIndex;i
-              if(ret.buttonIndex=="1"){
-                api.openWin({
-                    name: 'funds_win',
-                    url: './funds_win.html'
-                });
-              }else {
-                api.toast({msg: '未设置资金密码无法提现',});
-              }
-          });
-          return;
-        }
-        $('body').on('touchend', function(el) {
-        	if(el.target.tagName != 'INPUT') {
-        		$('input').blur()
-        	}
+        postRequest('exitsPassword',{accessToken:userInfo.token},function(ret) {
+          if(ret.data == true){
+            paymethod()
+          }else {
+            api.confirm({
+                title: '提示',
+                msg: '未设置资金密码，是否去设置？',
+                buttons: ['确定', '取消']
+            }, function(ret, err) {
+                // var index = ret.buttonIndex;i
+                if(ret.buttonIndex=="1"){
+                  api.openWin({
+                      name: 'funds_win',
+                      url: './funds_win.html'
+                  });
+                }else {
+                  api.toast({msg: '未设置资金密码无法提现',});
+                }
+            });
+          }
         })
-        setTimeout(function(){
-          api.openFrame({
-              name: 'pwd3',
-              url: './pwd3.html',
-              rect: {
-                  x: 0,
-                  y: 0,
-                  w: api.winWidth,
-                  h: api.winHeight,
-              },
-              bounces: false,
-              bgColor: 'rgba(255,255,255,.2)',
-          });
-        },200);
-
+    }
+    function paymethod(){
+      $('body').on('touchend', function(el) {
+        if(el.target.tagName != 'INPUT') {
+          $('input').blur()
+        }
+      })
+      setTimeout(function(){
+        api.openFrame({
+            name: 'pwd3',
+            url: './pwd3.html',
+            rect: {
+                x: 0,
+                y: 0,
+                w: api.winWidth,
+                h: api.winHeight,
+            },
+            bounces: false,
+            bgColor: 'rgba(255,255,255,.2)',
+        });
+      },200);
     }
     function payCallback(pwd){
       // console.log(String(pwd));
