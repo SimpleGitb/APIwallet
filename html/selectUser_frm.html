@@ -14,12 +14,12 @@
             flex-direction: column;
         }
 
-        .row {
-            height: .7rem;
-            margin: .02rem .15rem;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
+        .row{
+          height: .7rem;
+          margin: .02rem .15rem;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
         }
 
         input[type="radio"]+label::before {
@@ -67,10 +67,11 @@
             height: .4rem;
             border-radius: 50%;
             background: yellow;
-            margin: .21rem .09rem 0 .11rem;
+            margin: .21rem .09rem 0 0;
         }
 
         .row_c {
+          margin-left: -0.6rem;
             font-size: .12rem;
             color: #A5A5A5;
             display: flex;
@@ -86,18 +87,17 @@
             margin: .07rem 0 0 .1rem;
         }
 
-        .row_r {
-            font-size: .12rem;
-            color: #404249;
+        .row_r{
+          font-size: .12rem;
+          color:#404249;
+          text-align: right;
         }
-
-        .row_r_l {
-            margin: .23rem 0 0 .39rem;
+        .row_r_l{
+          margin: .23rem 0 0 .39rem;
         }
-
-        .row_r_r {
-            margin: .07rem 0 0 .18rem;
-            color: #A5A5A5;
+        .row_r_r{
+          margin: .12rem 0 0 .18rem;
+          color:#A5A5A5;
         }
 
         .wrap_h {
@@ -188,7 +188,7 @@ var fecth;
 
     };
     function gobuyOk() {
-      api.openWin({
+      api.closeToWin({
           name: 'buyDetail_win',
           url: './buyDetail_win.html',
           pageParam: {

@@ -26,7 +26,12 @@
         .info{ padding: 0.12rem 0 .12rem .15rem; color:#FF5656; }
         .info span{ color:#414758; }
         .top{ margin-bottom: .1rem;}
-        .button {width: 100%;height: .45rem;font-size: .2rem;color: #fff;margin-top: .66rem;background:rgba(55,106,252,1);border-radius: .06rem;display: flex; align-items: center;justify-content: center;}
+        .button {
+          height: .45rem;font-size: .2rem;color: #fff;margin-top: .66rem;background:rgba(55,106,252,1);border-radius: .06rem;display: flex; align-items: center;justify-content: center;
+          position: fixed;
+          bottom: 0.48rem;
+          width: 92%;
+        }
         .share{ width: .18rem; height: .18rem; margin-right: .1rem;}
     </style>
 </head>
@@ -40,9 +45,8 @@
             <li onclick='goteam()' id="myTeam">
 
             </li>
-            <li onclick='goServiceCenter()'>
-                <div class="title title2"><div class="title_left"><img class='img' src='../image/service.png'><span>服务中心</span></div><img class='right' src='../image/more2.png'></div>
-                <div class="info" id="serviceCenter"></div>
+            <li onclick='goServiceCenter()' id="serviceCenter">
+
             </li>
         </ul>
         <div class="button" onclick='share()'><img class='share' src='../image/share.png'>点击分享</div>
@@ -69,19 +73,24 @@
       {{ } }}
     </script>
     <script type="text/template" id="servicetmpl">
-    <div class="top">
-    <span>贡献总值：</span>{{= parseInt(it.minorBranchTotalProfit)+parseInt(it.mainBranchTotalProfit)}}
-    </div>
-    <div>
-      <span>分红比例：</span>
-      {{= dividendRatio(it.rank)}}
-    </div>
+      {{if(parseInt(it.rank) != 0){ }}
+      <div class="title title2"><div class="title_left"><img class='img' src='../image/service.png'><span>服务中心</span></div><img class='right' src='../image/more2.png'></div>
+      <div class="info">
+        <div class="top">
+          <span>贡献总值：</span>{{= parseInt(it.minorBranchTotalProfit)+parseInt(it.mainBranchTotalProfit)}}
+        </div>
+        <div>
+          <span>分红比例：</span>
+          {{= dividendRatio(it.rank)}}
+        </div>
+      </div>
+      {{ } }}
     </script>
     <script type='text/template' id='myTeamtmpl'>
       <div class="title title2"><div class="title_left"><img class='img' src='../image/myteam.png'><span>我的社群</span></div><img class='right' src='../image/more2.png'></div>
       <div class="info">
           <div class="top"><span>活跃度：</span>{{=it.length}}<span>人</span></div>
-          <div><span>累计收益：</span>100<span>AIB</span></div>
+          <div><span>累计收益：</span><span id="totalBonus" style="color:#FF5656;">0</span><span>AIB</span></div>
       </div>
     </script>
   </body>
@@ -90,6 +99,7 @@
     <script type="text/javascript" src="../script/common.js"></script>
     <script type="text/javascript" src="../script/doT.min.js"></script>
     <script type="text/javascript">
+    var totalBonus;
         apiready = function () {
             fnReady()
             getData();
@@ -102,12 +112,16 @@
               if(ret.flag ==true && ret){
                 let todayTmpl = doT.template($api.dom('#servicetmpl').innerHTML);
                 $api.dom('#serviceCenter').innerHTML = todayTmpl(ret.data)
+                totalBonus = ret.data.totalBonus;
               }
             })
             getRequest('branch/getSubBranchList','',function (ret){
               if(ret.flag ==true && ret){
                 let myTeamtmpl = doT.template($api.byId('myTeamtmpl').innerHTML);
                 $api.byId('myTeam').innerHTML = myTeamtmpl(ret.data);
+                if(totalBonus){
+                $api.dom('#totalBonus').innerHTML = totalBonus;
+                }
               }
             })
         }

@@ -81,6 +81,7 @@
       };
       function closeapp() {
         // api.closeWin();
+        $api.rmStorage('userInfo');
         api.openWin({
             name: 'index',
             url: '../index.html',

@@ -73,6 +73,7 @@
   <script type="text/javascript" src="../script/api.js"></script>
   <script type="text/javascript" src="../script/common.js"></script>
   <script type="text/javascript" src="../script/aes.js"></script>
+  <script type="text/javascript" src="../script/gt.js"></script>
   <script type="text/javascript">
       let user,token,key,enced;
       apiready = function(){
@@ -137,5 +138,71 @@
             $(this).parent().find('.clear').show();
           })
       })
+
+      //获取验证码
+      let wait = 60;
+      function time(dom){
+        if(wait == 0){
+          dom.removeClass('readonly');
+          dom.text('发送验证码');
+          wait = 60;
+        }else{
+          dom.addClass('readonly');
+          dom.text(wait + '重新发送');
+          wait--;
+          setTimeout(function() {
+            time(dom);
+          },1000);
+        }
+      }
+    var handler = function (captchaObj) {
+      captchaObj.onReady(function () {
+        $('#wait').hide();
+      }).onSuccess(function () {
+        var result = captchaObj.getValidate();
+        if(!result){
+          return alert('请完成认证');
+        }
+        if(wait == 60){
+          postRequest('sendMsg',{
+            geetest_challenge:result.geetest_challenge,
+            geetest_validate:result.geetest_validate,
+            geetest_seccode:result.geetest_seccode
+          },function (ret) {
+            if(ret.flag == true){
+              api.toast({msg: "发送成功！"});
+              time($('#sendCode'));
+            }else{
+              api.toast({msg: ret.errMsg});
+            }
+          })
+        }
+      });
+      $('#sendCode').click(function () {
+        if(wait == 60){
+          captchaObj.verify();
+        }
+      })
+    };
+    $.ajax({
+      url:'http://36.33.216.16:28080/app-rest/verification?t=' + (new Date()).getTime(),
+      type:'post',
+      dataType:'json',
+      data:{
+
+      },
+      success: function (data) {
+        initGeetest({
+          gt:data.gt,
+          challenge:data.challenge,
+          offline:!data.success,
+          new_captcha:data.new_captcha,
+          timeout:'5000',
+          product:'bind',
+          width:'300px',
+          https:true
+        },handler);
+      }
+    })
   </script>
   </html>

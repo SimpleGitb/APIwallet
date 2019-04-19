@@ -71,6 +71,7 @@
   <script type="text/javascript" src="../script/zepto.min.js"></script>
   <script type="text/javascript" src="../script/doT.min.js"></script>
   <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/gt.js"></script>
   <script type="text/javascript" src="../script/common.js"></script>
   <script type="text/javascript">
       apiready = function(){
@@ -79,58 +80,80 @@
         var emailTmpl = doT.template($api.dom('#emailTmpl').innerHTML);
         $api.dom('#email').innerHTML = emailTmpl(userInfo);
       };
-      function send() {
-        var geeTest = api.require('geeTest');
-        geeTest.openGTView({
-            api_1: 'http://webapi.geetest.com/apis/start-mobile-captcha/',
-            api_2: 'http://webapi.geetest.com/apis/mobile-server-validate/',
-            blurType: 'dark',
-            https: 'false'
-        }, function(ret, err) {
-            if (ret.status) {
-                /* Todo Your Code */
-                api.alert({
-                    title: '验证结果',
-                    msg: '验证成功',
-                    buttons: ['确定']
-                });
-
-            } else {
-
-                if (err.msg == '-100') {
-                    api.alert({
-                        title: '验证信息错误',
-                        msg: 'Invalid config params. Check Your Server/Client Config.',
-                        buttons: ['确定']
-                    });
-                } else if (err.msg == '-200') {
-                    api.alert({
-                        title: '验证不可用',
-                        msg: '极验服务不可用, 请使用备用验证',
-                        buttons: ['确定']
-                    });
-                } else if (err.msg == '-300') {
-                    api.alert({
-                        title: '验证关闭',
-                        msg: '用户关闭了验证',
-                        buttons: ['确定']
-                    });
-                } else if (err.msg == '-400') {
-                    api.alert({
-                        title: '验证结果',
-                        msg: '二次验证失败',
-                        buttons: ['确定']
-                    });
-                } else {
-                    api.alert({
-                        title: '验证异常',
-                        msg: err.msg,
-                        buttons: ['确定']
-                    });
-                }
-            }
-        });
+      let wait = 60;
+      function time(dom){
+        if(wait == 0){
+          dom.removeClass('readonly');
+          dom.text('发送验证码');
+          wait = 60;
+        }else{
+          dom.addClass('readonly');
+          dom.text(wait + '重新发送');
+          wait--;
+          setTimeout(function() {
+            time(dom);
+          },1000);
+        }
       }
+      var handler = function (captchaObj) {
+        captchaObj.onReady(function () {
+          $('#wait').hide();
+        }).onSuccess(function () {
+          var result = captchaObj.getValidate();
+          if(!result){
+            return alert('请完成认证');
+          }
+          if(wait == 60){
+            postRequest('sendMsg',{
+              geetest_challenge:result.geetest_challenge,
+              geetest_validate:result.geetest_validate,
+              geetest_seccode:result.geetest_seccode
+            },function (ret) {
+              if(ret.flag == true){
+                api.toast({msg: "发送成功！"});
+                time($('#sendCode'));
+              }else{
+                api.toast({msg: ret.errMsg});
+              }
+            })
+          }
+        });
+        $('#sendCode').click(function () {
+          // let address = $api.val($api.byId('email'));
+          // let Email = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+          // if(address == ''){
+          //   api.toast({msg: '请输入您的邮箱'});
+          //   return ;
+          // }
+          // if(!Email.test(address)){
+          //   api.toast({msg: '邮箱格式不正确'})
+          //   return ;
+          // }
+          if(wait == 60){
+            captchaObj.verify();
+          }
+        })
+      };
+      $.ajax({
+        url:'http://36.33.216.16:28080/app-rest/verification?t=' + (new Date()).getTime(),
+        type:'post',
+        dataType:'json',
+        data:{
+
+        },
+        success: function (data) {
+          initGeetest({
+            gt:data.gt,
+            challenge:data.challenge,
+            offline:!data.success,
+            new_captcha:data.new_captcha,
+            timeout:'5000',
+            product:'bind',
+            width:'300px',
+            https:true
+          },handler);
+        }
+      })
       $(function(){
           $('input').focus(function(){
             $(this).parent().siblings().find('.clear').hide();

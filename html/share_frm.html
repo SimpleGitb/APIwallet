@@ -26,8 +26,9 @@
             text-align: center;;
           }
           .wrap_head{
-            height: .8rem;
-            margin: .69rem 1.47rem 0 1.47rem;
+            width:96px;
+            height:96px;
+            margin: auto;;
             background: #fff;
             border-radius: .1rem;
             display: flex;
@@ -67,10 +68,10 @@
         var MNActionButton = api.require('MNActionButton');
       MNActionButton.open({
           layout: {
-              row: 2,
-              col: 3,
+              row: 1,
+              col: 5,
               rowSpacing: 5,
-              colSpacing: 10,
+              colSpacing: 5,
               offset: 0
           },
           animation: true,
@@ -79,7 +80,7 @@
               maskBg: 'rgba(0,0,0,0.2)',
               bg: '#fff',
               cancelButton: {
-                  size: 44,
+                  size: 24,
                   bg: '#fff',
                   icon: 'widget://res/action-button-cancel.png'
               },
@@ -94,42 +95,43 @@
               }
           },
           items: [{
-              icon: 'widget://res/MNActionButton/0.png',
-              highlight: 'widget://res/MNActionButton/0.png',
-              title: '菜单项1'
+              icon: '../image/weixin.png',
+              title: '微信'
           }, {
-              icon: 'widget://res/MNActionButton/1.png',
-              highlight: 'widget://res/MNActionButton/1.png',
-              title: '菜单项2'
+              icon: '../image/pengyouquan.png',
+              title: '朋友圈'
           }, {
-              icon: 'widget://res/MNActionButton/2.png',
-              highlight: 'widget://res/MNActionButton/2.png',
-              title: '菜单项3'
+              icon: '../image/weibo.png',
+              title: '微博'
           }, {
-              icon: 'widget://res/MNActionButton/3.png',
-              highlight: 'widget://res/MNActionButton/3.png',
-              title: '菜单项4'
+              icon: '../image/QQ.png',
+              title: 'QQ'
           }, {
-              icon: 'widget://res/MNActionButton/4.png',
-              highlight: 'widget://res/MNActionButton/4.png',
-              title: '菜单项5'
-          }, {
-              icon: 'widget://res/MNActionButton/5.png',
-              highlight: 'widget://res/MNActionButton/5.png',
-              title: '菜单项6'
-          }, {
-              icon: 'widget://res/MNActionButton/6.png',
-              highlight: 'widget://res/MNActionButton/6.png',
-              title: '菜单项7'
-          }, {
-              icon: 'widget://res/MNActionButton/7.png',
-              highlight: 'widget://res/MNActionButton/7.png',
-              title: '菜单项8'
+              icon: '../image/qunfengqqkongjian.png',
+              title: 'QQ空间'
           }]
       }, function(ret) {
-          if (ret) {
-              alert(JSON.stringify(ret));
-          }
+        if(ret.index == 0){
+          var wx = api.require('wx');
+          wx.isInstalled(function(ret, err) {
+              if (ret.installed) {
+                var wx = api.require('wx');
+                  wx.shareText({
+                      apiKey: '',
+                      scene: 'timeline',
+                      text: '我分享的文本'
+                  }, function(ret, err) {
+                      if (ret.status) {
+                          alert('分享成功');
+                      } else {
+                          alert(err.code);
+                      }
+                  });
+              } else {
+                  alert('当前设备未安装微信客户端');
+              }
+          });
+        }
       });
       }
   </script>

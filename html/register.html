@@ -52,7 +52,7 @@
     fnReady()
   };
 
-  function fnSubmit() {
+  function fnSubmit(){
     let formList = [$api.byId('email'),$api.byId('code'),$api.byId('sendCode'),$api.byId('password1'),$api.byId('password2'),$api.byId('invCode')]
     let param = {
       phone: $api.val(formList[0]),
@@ -118,7 +118,7 @@ function time(dom) {
 	  wait = 60;
 	} else {
 	  dom.addClass('readonly');
-	  dom.text("(" + wait + ")重新发送");
+	  dom.text( wait + "重新发送");
 	  wait--;
 	  setTimeout(function() {
 		  time(dom)
@@ -153,6 +153,7 @@ function sendCode(thisB) {
     })
   }
 }
+
 var handler = function (captchaObj) {
     captchaObj.onReady(function () {
         $("#wait").hide();

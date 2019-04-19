@@ -18,6 +18,7 @@
             margin: .02rem .15rem;
             display: flex;
             flex-direction: row;
+            justify-content: space-between;
           }
           .blank{
             height: .01rem;
@@ -42,13 +43,14 @@
             height: .4rem;
             border-radius: 50%;
             background: yellow;
-            margin: .21rem 0 0 .11rem;
+            margin: .21rem 0 0 .01rem;
           }
           .row_c{
             font-size: .12rem;
             color:#A5A5A5;
             display: flex;
             flex-direction: column;
+            margin-left: -0.2rem;
           }
           .row_c_l{
             font-size: .16rem;
@@ -58,6 +60,7 @@
             margin: .07rem 0 0 .1rem;
           }
           .row_r{
+            float: right;
             font-size: .12rem;
             color:#404249;
             text-align: right;
@@ -66,7 +69,7 @@
             margin: .23rem 0 0 .39rem;
           }
           .row_r_r{
-            margin: .07rem 0 0 .18rem;
+            margin: .12rem 0 0 .18rem;
             color:#A5A5A5;
           }
           .wrap_h{
@@ -80,7 +83,19 @@
   </head>
   <body>
     <div class="wrap" id="myteam">
-
+      <div class="row">
+        <img src="{{=it[k].img}}"/>
+        <div class="picture"></div>
+        <div class="row_c">
+          <div class="row_c_l">a'a'a</div>
+          <div class="row_c_r">aaa</div>
+        </div>
+        <div class="row_r">
+          <div class="row_r_l">aaaa</div>
+          <div class="row_r_r">aaa</div>
+        </div>
+      </div>
+      <div class="blank"></div>
     </div>
   </body>
   <script type='text/template' id='myteamTmpl'>

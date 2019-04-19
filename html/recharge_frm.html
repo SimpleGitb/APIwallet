@@ -17,13 +17,17 @@
           .row_r{ font-size:.2rem; color: #FF5656;margin-right: .15rem;}
           .row_b{ display: flex; justify-content: space-between; margin:.08rem .15rem .17rem .15rem; }
           .blank_2{ height: 1px; background:#F9F9F9; width: 96%; margin-left: 4%;}
+          #aibaddress{
+            color: #376AFC;
+            margin-top: 0.2rem;
+          }
       </style>
   </head>
   <body>
     <div class="wrap">
       <div class="blank"></div>
       <div class="wrap_top">
-        <div class="adress">您的AIB充值地址:</div>
+        <div class="adress">您的AIB充值地址:<span id="aibaddress" onclick="copyArticle('aibaddress')"></span></div>
         <div class="ethadress" id="address">
 
         </div>
@@ -32,33 +36,27 @@
       <div class="blank"></div>
       <div class="wrap_b">
         <div class="title">充值记录</div>
-        <div class="row row2">
-          <div class="row_t">
-            <span class="row_l">充值</span>
-            <span class="row_r">+200</span>
-          </div>
-          <div class="row_b">
-            <span>2019/01/03 18:23</span>
-            <span>AIB</span>
-          </div>
-        </div>
-        <div class="blank_2"></div>
-        <div class="row">
-          <div class="row_t">
-            <span class="row_l">充值</span>
-            <span class="row_r">+200</span>
-          </div>
-          <div class="row_b">
-            <span>2019/01/03 18:23</span>
-            <span>AIB</span>
-          </div>
-        </div>
-        <div class="blank_2"></div>
+        <div id="remarkjilv"></div>
       </div>
     </div>
   </body>
   <script type='text/template' id='addresstmpl'>
     <span>{{= it.address }}</span>
+  </script>
+  <script type='text/template' id='remarkjilvtmpl'>
+    {{ for(let k in it) { }}
+    <div class="row row2">
+      <div class="row_t">
+        <span class="row_l">充值</span>
+        <span class="row_r">+{{=it[k].amount}}</span>
+      </div>
+      <div class="row_b">
+        <span>{{= it[k].updateTime}}</span>
+        <span>AIB</span>
+      </div>
+    </div>
+    <div class="blank_2"></div>
+    {{ } }}
   </script>
   <script type="text/javascript" src="../script/api.js"></script>
   <script type="text/javascript" src="../script/common.js"></script>
@@ -67,7 +65,7 @@
   <script type="text/javascript" src="../script/jquery.min.js"></script>
   <script src="../script/qrcode.js"></script>
   <script type="text/javascript">
-  var address;
+  var address,remarkdata=[];
       apiready = function(){
         address = $api.getStorage('userInfo').address;
         console.log(JSON.stringify(address));
@@ -76,6 +74,35 @@
             height : 160
         });
         qrcode.makeCode(address);
+        $api.dom('#aibaddress').innerHTML = address;
+        var param ={
+          currency:'AIB',
+          currentPageNo:'1'
+        }
+        postRequest('getTransactionRecordList',param,function (ret){
+          if(ret.flag ==true && ret){
+
+            for (var i = 0; i < ret.data.rows.length; i++) {
+              if(ret.data.rows[i].inOrOut == '01'){
+                console.log(JSON.stringify(ret.data.rows[i]))
+                remarkdata.push(ret.data.rows[i]);
+              }
+            }
+            // console.log(JSON.stringify(remarkdata));
+            let remarkjilvTmpl = doT.template($api.byId('remarkjilvtmpl').innerHTML);
+            $api.byId('remarkjilv').innerHTML = remarkjilvTmpl(remarkdata);
+          }
+        })
       };
+      function copyArticle(event) {    
+        console.log(event)
+  			const range = document.createRange();    
+  			range.selectNode(document.getElementById(event));    
+  			const selection = window.getSelection();    
+  			if(selection.rangeCount > 0) selection.removeAllRanges();    
+  			selection.addRange(range);         
+  			document.execCommand('copy');
+  			api.toast({ msg: '已复制' }); 
+  		}
   </script>
   </html>
