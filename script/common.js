@@ -128,6 +128,16 @@ function postRequest(url,params,callback) {
       }
   }, function(ret, err) {
       api.hideProgress();
+      if(ret.errCode == "1201"){
+        $api.rmStorage('userInfo');
+        $api.rmStorage('password');
+        // api.closeFrameGroup({
+        //     name: 'group'
+        // });
+        api.closeToWin({
+            name: 'root'
+        });
+      }
       if (ret) {
           if (typeof callback == 'function') {
               callback(ret);
@@ -151,6 +161,16 @@ function getRequest(url,params,callback) {
       method: 'get'
   }, function(ret, err) {
     api.hideProgress();
+    if(ret.errCode == "1201"){
+      $api.rmStorage('userInfo');
+      $api.rmStorage('password');
+      // api.closeFrameGroup({
+      //     name: 'group'
+      // });
+      api.closeToWin({
+          name: 'root'
+      });
+    }
       if (ret) {
           if (typeof callback == 'function') {
               callback(ret);
