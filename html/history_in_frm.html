@@ -43,6 +43,7 @@
           }
           .row1{
             margin-top: .12rem;
+            margin-bottom: .12rem;
           }
       </style>
   </head>
@@ -53,17 +54,20 @@
         <div class="wrap_right">分红收益</div>
       </div>
       <div class="blank"></div>
-      <div class="row" id="history">
+      <div id="history"></div>
 
-      </div>
     </div>
   </body>
   <script type='text/template' id='historyInTmpl'>
     {{if( it && it.length>0){ }}
-      <div class="row_left row1">2019-03-06</div>
-      <div class="row_right row1">+2348 AIB</div>
+      {{ for(var i in it) { }}
+        <div class="row">
+          <div class="row_left row1">{{= it[i].createTime}}</div>
+          <div class="row_right row1">+{{= it[i].bonus}} AIB</div>
+        </div>
+      {{ } }}
     {{ }else{ }}
-
+      <div class="noData">暂无数据</div>
     {{ } }}
   </script>
   <script type="text/javascript" src="../script/api.js"></script>

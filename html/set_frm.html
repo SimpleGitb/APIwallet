@@ -82,10 +82,12 @@
       function closeapp() {
         // api.closeWin();
         $api.rmStorage('userInfo');
-        api.openWin({
-            name: 'index',
-            url: '../index.html',
-            bounces:false,
+        $api.rmStorage('password');
+        api.closeFrameGroup({
+            name: 'group'
+        });
+        api.closeToWin({
+            name: 'root'
         });
       }
   </script>

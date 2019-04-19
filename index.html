@@ -11,7 +11,7 @@
 
 <body>
     <div id="formList" class="flex-wrap flex-vertical">
-        <h2>欢迎来到“AI工厂”</h2>
+        <h2>欢迎来到“AI工场”</h2>
         <div class="form_box">
             <div class="input-t">
                 <label>您的帐号（邮箱）</label>
@@ -46,7 +46,6 @@
 
         if(userInfo){
           fnOpenMain()
-          // console.log(JSON.stringify(userInfo));
         } else {
           $api.rmStorage('userInfo');
         }
@@ -76,13 +75,13 @@
         return
       }
       if(param.code == ''){
-        api.toast({msg: '请输入您的验证码'});
+        api.toast({msg: '请输入您的密码'});
         return
       }
       postRequest('newLogin',param,function(ret) {
         if(ret.flag === true){
           setUserInfo(ret.data)
-            console.log(JSON.stringify($api.getStorage('userInfo')));
+            // console.log(JSON.stringify($api.getStorage('userInfo')));
             fnOpenMain();
         }else{
           api.toast({msg: ret.errMsg});

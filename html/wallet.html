@@ -126,29 +126,38 @@
         </div>
         <div class="wrap_head_b_r row" onclick='tocash()'>
           <img src="../image/recharge.png">
-          <span>转账</span>
+          <span>提现</span>
         </div>
       </div>
     </div>
-    <!-- <div class="footer" onclick="transfer()">用户转账</div> -->
+    <div class="footer" onclick="transfer()">用户转账</div>
   </div>
 </body>
 <script type='text/template' id='numtmpl'>
-  <span>{{=toThousands(it.amount)}}</span>
+  <span>{{=toThousands(it)}}</span>
 </script>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/common.js"></script>
 <script type="text/javascript" src="../script/zepto.min.js"></script>
 <script type="text/javascript" src="../script/doT.min.js"></script>
 <script>
-  apiready = function update() {
+  apiready = function() {
       fnReady()
       userInfo = $api.getStorage('userInfo');
       postRequest('getAccountBalance',{accessToken:userInfo.token},function (ret) {
         if(ret.flag ==true && ret){
-          console.log(JSON.stringify(ret.data))
+          var acountcost;
+          for(var i = 0;i<ret.data.length;i++){
+            if(ret.data[i].currency == "AIB"){
+              if(typeof ret.data[i].freezeAmount == 'number' ){
+                acountcost = ret.data[i].amount-ret.data[i].freezeAmount
+              }else {
+                acountcost = ret.data[i].amount;
+              }
+            }
+          }
           let numtmpl = doT.template($api.byId('numtmpl').innerHTML);
-          $api.byId('num').innerHTML = numtmpl(ret.data[0]);
+          $api.byId('num').innerHTML = numtmpl(parseInt(acountcost));
         }
       })
       api.addEventListener({
@@ -185,7 +194,10 @@
     });
   }
   function transfer() {
-    // toThousands($api.text($api.byId('num')));
+    api.openWin({
+        name: 'usercash_win',
+        url: './usercash_win.html',
+    });
   }
 </script>
 

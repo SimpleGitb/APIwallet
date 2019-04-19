@@ -33,17 +33,17 @@
     <div class="wrap">
       <div class="blank"></div>
       <div class="wrap_top">
-        <div class="adress">AIB提现地址:</div>
-        <div class="ethadress"><input id="CashAddress" placeholder="请输入AIB提现地址"></div>
+        <div class="adress">用户转账账号:</div>
+        <div class="ethadress"><input id="CashAddress" placeholder="请输入转账账号"></div>
         <div class="blank_3"></div>
-        <div class="adress">请输入您的提现数量（当前手续费 <span id="handfee">0%</span>）</div>
-        <div class="ethadress"><input id="tocashnum" placeholder="请输入您的提现数量"></div>
+        <div class="adress">请输入您的转账数量</div>
+        <div class="ethadress"><input id="tocashnum" placeholder="请输入您的转账数量"></div>
         <div class="blank_3"></div>
-        <div class="btn" onclick="toCash()">确认提现</div>
+        <div class="btn" onclick="toCash()">确认转账</div>
       </div>
       <div class="blank"></div>
       <div class="wrap_b" >
-        <div class="title">提现记录</div>
+        <div class="title">转账记录</div>
         <div id="tocash" id="tocash">
 
         </div>
@@ -53,10 +53,10 @@
   <script type='text/template' id='tocashTmpl'>
     {{if( it && it.length>0){ }}
     {{ for(let k in it) { }}
-      {{if( it[k].payType =='04'){ }}
+      {{if( it[k].payType =='02'){ }}
         <div class="row">
           <div class="row_t">
-            <span class="row_l">提现</span>
+            <span class="row_l">平台内部转账</span>
             {{if( it[k].inOrOut =='01'){ }}
             <span class="row_r color1">+{{=it[k].amount}}</span>
             {{ }else{ }}
@@ -85,6 +85,9 @@
       // let buypwd = $api.getStorage('password');
       apiready = function(){
         userInfo = $api.getStorage('userInfo');
+        getFecth();
+      };
+      function getFecth(){
         postRequest('getTransactionRecordList',{accessToken: userInfo.token,},function(ret) {
           if(ret.flag ==true && ret){
             console.log(JSON.stringify(ret.data))
@@ -92,21 +95,14 @@
             $api.byId('tocash').innerHTML = tocashTmpl(ret.data.rows);
           }
         })
-        postRequest('getTradeFee',{accessToken: userInfo.token,currency:'AIB'},function(ret) {
-          if(ret.flag ==true && ret){
-            console.log(JSON.stringify(ret.data))
-            $api.byId('handfee').innerHTML = ret.data*100+"%";
-
-          }
-        })
-      };
+      }
       function toCash(){
         if(!$api.val($api.dom('#CashAddress'))){
-          api.toast({msg:'请输入AIB提现地址'});
+          api.toast({msg:'请输入转账账号'});
           return;
         }
         if(!$api.val($api.dom('#tocashnum'))){
-          api.toast({msg:'请输入您的提现数量'});
+          api.toast({msg:'请输入您的转账数量'});
           return;
         }
         if($api.getStorage('password')){
@@ -124,30 +120,26 @@
                     url: './funds_win.html'
                 });
               }else {
-                api.toast({msg: '未设置资金密码无法提现',});
+                api.toast({msg: '未设置资金密码无法转账',});
               }
           });
           return;
         }
-        $('body').on('touchend', function(el) {
-        	if(el.target.tagName != 'INPUT') {
-        		$('input').blur()
-        	}
-        })
-        setTimeout(function(){
-          api.openFrame({
-              name: 'pwd3',
-              url: './pwd3.html',
-              rect: {
-                  x: 0,
-                  y: 0,
-                  w: api.winWidth,
-                  h: api.winHeight,
-              },
-              bounces: false,
-              bgColor: 'rgba(255,255,255,.2)',
-          });
-        },200);
+        api.openFrame({
+            name: 'pwd4',
+            url: './pwd4.html',
+            rect: {
+                x: 0,
+                y: 0,
+                w: api.winWidth,
+                h: api.winHeight,
+            },
+            // pageParam:{
+            //     emalipay:emalipay.fecth.invitationCode
+            // },
+            bounces: false,
+            bgColor: 'rgba(255,255,255,.2)',
+        });
 
     }
     function payCallback(pwd){
@@ -173,7 +165,8 @@
                   function(ret){
                     console.log(JSON.stringify(ret))
                   if(ret.flag ==true){
-                    api.toast({ msg: '提现成功' }); 
+                    api.toast({ msg: '转账成功' }); 
+                    getFecth();
                     api.sendEvent({
                         name: 'update',
                     });

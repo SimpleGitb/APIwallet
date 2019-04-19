@@ -93,14 +93,10 @@
 <script type="text/javascript">
     apiready = function() {
         funIniGroup()
-
         api.addEventListener({
             name: 'keyback'
         }, function(ret, err){});
     }
-
-
-
     function funIniGroup() {
         var eFootLis = $api.domAll('#footer li'),
             frameNames = ['home', 'node', 'wallet', 'my'],

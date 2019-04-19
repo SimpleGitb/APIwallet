@@ -127,6 +127,7 @@
               console.log(JSON.stringify(ret));
               if(ret.flag === true){
                 $api.setStorage('password', list[2]);
+                api.toast({msg: '资金密码设置成功'});
               }
             })
           }

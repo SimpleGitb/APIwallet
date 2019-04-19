@@ -154,6 +154,7 @@
 <script>
   apiready=function () {
       userInfo = $api.getStorage('userInfo');
+      console.log(JSON.stringify(userInfo))
       fnReady()
       api.addEventListener({
           name: 'keyback'

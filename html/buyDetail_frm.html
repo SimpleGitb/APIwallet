@@ -354,7 +354,7 @@ let user,token,key,enced,costNum;
            if(ret.flag ==true && ret){
              for(var i = 0;i<ret.data.length;i++){
                if(ret.data[i].currency == "AIB"){
-                 if(typeof 1 == 'number' ){
+                 if(typeof ret.data[i].freezeAmount == 'number' ){
                    acountcost = ret.data[i].amount-ret.data[i].freezeAmount
                  }else {
                    acountcost = ret.data[i].amount;
@@ -409,7 +409,29 @@ let user,token,key,enced,costNum;
         api.toast({ msg: '请先选择用户' });
         return;
       }
-      console.log(JSON.stringify(emalipay.fecth.invitationCode));
+        console.log($api.getStorage('password'));
+        if($api.getStorage('password')){
+          console.log($api.getStorage('password'))
+        }else {
+          api.confirm({
+              title: '提示',
+              msg: '未设置资金密码，是否去设置？',
+              buttons: ['确定', '取消']
+          }, function(ret, err) {
+              // var index = ret.buttonIndex;i
+              if(ret.buttonIndex=="1"){
+                api.openWin({
+                    name: 'funds_win',
+                    url: './funds_win.html'
+                });
+              }else {
+                api.toast({msg: '未设置资金密码无法支付',});
+              }
+          });
+          return;
+        }
+
+      // console.log(JSON.stringify(emalipay.fecth.invitationCode));
         api.openFrame({
             name: 'pwd2',
             url: './pwd2.html',
@@ -419,14 +441,12 @@ let user,token,key,enced,costNum;
                 w: api.winWidth,
                 h: api.winHeight,
             },
-            pageParam:{
-                emalipay:emalipay.fecth.invitationCode
-            },
+            // pageParam:{
+            //     emalipay:emalipay.fecth.invitationCode
+            // },
             bounces: false,
             bgColor: 'rgba(255,255,255,.2)',
         });
-
-
     }
 
     function selectScroll() {
@@ -436,7 +456,7 @@ let user,token,key,enced,costNum;
       });
 
     }
-    function payCallback(pwd,code){
+    function payCallback(pwd){
       // console.log(String(pwd));
           postRequest('getAeskey',{accessToken:token},function (ret) {
             if(ret.flag == true){
@@ -456,31 +476,35 @@ let user,token,key,enced,costNum;
 
               var param ={
                 rank: rank,
-                inviteCode:code,
+                inviteCode:emalipay.fecth.invitationCode,
                 points:cost,
                 password:enced
               };
               console.log(JSON.stringify(param));
               postRequest('branch/sendGiftScroll',param,function(ret) {
                 if(ret.errCode == '0'){
-                  api.toast({ msg: '购买成功！' });
-                  console.log(JSON.stringify(ret));
+                  comFirm('购买成功');
                 }else {
-                  api.toast({ msg: JSON.stringify(ret.errMsg) });
+                  // api.toast({ msg: JSON.stringify(ret.errMsg) });
+                  comFirm(ret.errMsg);
                 }
               })
-              // postRequest('setPayPassword',{ accessToken:token,
-              //   payPassword:enced,
-              //   code:list[1]},
-              //   function(ret){
-              //   console.log(JSON.stringify(ret));
-              //   if(ret.flag === true){
-              //     $api.setStorage('password', list[2]);
-              //   }
-              // })
             }
           })
 
+    }
+    function comFirm(msg){
+      api.alert({
+          title: '提示',
+          msg: msg
+      }, function(ret, err) {
+          // var index = ret.buttonIndex;i
+          if(ret.buttonIndex=="1"){
+            api.closeToWin({
+                name: 'service_center_win'
+            });
+          }
+      });
     }
 </script>
 

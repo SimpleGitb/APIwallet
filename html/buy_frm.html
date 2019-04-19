@@ -166,7 +166,7 @@
           <div class="blank"></div>
           <div class="wrap_bottom_b">
               <span class="wrap_bottom_l">钱包余额:</span>
-              <span class="wrap_bottom_r">1000AIB</span>
+              <span class="wrap_bottom_r" id="wrap_bottom_r">0AIB</span>
           </div>
       </div>
       <footer>
@@ -178,17 +178,55 @@
       </footer>
       </script>
 </body>
+<script type="text/javascript" src="../script/aes.js"></script>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/zeptp.min.js"></script>
 <script type="text/javascript" src="../script/common.js"></script>
 <script type="text/javascript" src="../script/doT.min.js"></script>
 <script type="text/javascript">
+var token = $api.getStorage('userInfo').token;
     apiready = function() {
         let scrolltmpl = doT.template($api.dom('#scrolltmpl').innerHTML);
         $api.dom('#payScroll').innerHTML = scrolltmpl(api.pageParam);
+        userInfo = $api.getStorage('userInfo');
+        postRequest('getAccountBalance',{accessToken:userInfo.token},function (ret) {
+          if(ret.flag ==true && ret){
+            var acountcost;
+            for(var i = 0;i<ret.data.length;i++){
+              if(ret.data[i].currency == "AIB"){
+                if(typeof ret.data[i].freezeAmount == 'number' ){
+                  acountcost = ret.data[i].amount-ret.data[i].freezeAmount
+                }else {
+                  acountcost = ret.data[i].amount;
+                }
+              }
+            }
+            $api.byId('wrap_bottom_r').innerHTML = acountcost+"AIB";
+          }
+        })
     };
 
     function pay() {
+      if($api.getStorage('password')){
+        // console.log($api.getStorage('password'))
+      }else {
+        api.confirm({
+            title: '提示',
+            msg: '未设置资金密码，是否去设置？',
+            buttons: ['确定', '取消']
+        }, function(ret, err) {
+            // var index = ret.buttonIndex;i
+            if(ret.buttonIndex=="1"){
+              api.openWin({
+                  name: 'funds_win',
+                  url: './funds_win.html'
+              });
+            }else {
+              api.toast({msg: '未设置资金密码无法支付',});
+            }
+        });
+        return;
+      }
         api.openFrame({
             name: 'pwd',
             url: './pwd.html',
@@ -208,19 +246,37 @@
     }
 
     function payCallback(pwd){
-      postRequest('task/buyScroll',{
-          rank: api.pageParam.rank,
-          pwd:pwd
-      },function(ret){
-        if (ret && ret.flag && ret.data) {
-          api.sendEvent({
-              name: 'upDateScroll'
+      postRequest('getAeskey',{accessToken:token},function (ret) {
+        if(ret.flag == true){
+          key =ret.data;
+          // console.log(key);
+          var keyval = CryptoJS.enc.Utf8.parse(key);
+          // console.log(keyval);
+          var plaintText = String(pwd);
+          var iv   = CryptoJS.enc.Latin1.parse('ed16b1f8a9e648d4');
+          var encryptedData = CryptoJS.AES.encrypt(plaintText, keyval, {
+              iv:iv,
+              mode: CryptoJS.mode.CBC,
+              padding: CryptoJS.pad.Pkcs7
           });
-          api.closeWin();
-        } else {
-          api.toast({ msg: ret.errMsg });
+          enced = CryptoJS.enc.Base64.stringify(encryptedData.ciphertext);
+          console.log(enced);
+          postRequest('task/buyScroll',{
+              rank: api.pageParam.rank,
+              password:enced
+          },function(ret){
+            if (ret && ret.flag && ret.data) {
+              api.sendEvent({
+                  name: 'upDateScroll'
+              });
+              api.closeWin();
+            } else {
+              api.toast({ msg: ret.errMsg });
+            }
+          })
         }
       })
+
     }
 </script>
 

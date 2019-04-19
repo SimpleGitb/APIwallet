@@ -46,6 +46,12 @@
             background: #F9F9F9;
             margin-left: .15rem;
           }
+          .color1{
+            color: #FF5656 !important;
+          }
+          .color2{
+            color: #50D26F !important;
+          }
       </style>
   </head>
   <body>
@@ -56,17 +62,126 @@
   <script type='text/template' id='moneyRecordTmpl'>
     {{if( it && it.length>0){ }}
       {{ for(let k in it) { }}
-        <div class="row">
-          <div class="row_t row_t2">
-            <span>提现</span>
-            <span>-{{=toThousands(it[k].amount)}}</span>
+        {{ if(it[k].payType == '05'){ }}
+          <div class="row">
+            <div class="row_t row_t2">
+              <span>充值</span>
+              {{ if(it[k].inOrOut == '01'){ }}
+                <span class="color1">+{{=toThousands(it[k].amount)}}</span>
+              {{ }else{ }}
+                <span class="color2">-{{=toThousands(it[k].amount)}}</span>
+              {{ } }}
+            </div>
+            <div class="row_b">
+              <span>{{= it[k].updateTime}}</span>
+              <span>AIB</span>
+            </div>
           </div>
-          <div class="row_b">
-            <span>2019/03/03 15:23</span>
-            <span>AIB</span>
+          <div class="blank"></div>
+        {{ } }}
+        {{ if(it[k].payType == '04'){ }}
+          <div class="row">
+            <div class="row_t row_t2">
+              <span>提现</span>
+              {{ if(it[k].inOrOut == '01'){ }}
+                <span class="color1">+{{=toThousands(it[k].amount)}}</span>
+              {{ }else{ }}
+                <span class="color2">-{{=toThousands(it[k].amount)}}</span>
+              {{ } }}
+            </div>
+            <div class="row_b">
+              <span>{{= it[k].updateTime}}</span>
+              <span>AIB</span>
+            </div>
           </div>
-        </div>
-        <div class="blank"></div>
+          <div class="blank"></div>
+        {{ } }}
+        {{ if(it[k].payType == '25'){ }}
+          <div class="row">
+            <div class="row_t row_t2">
+              <span>购买卷轴</span>
+              {{ if(it[k].inOrOut == '01'){ }}
+                <span class="color1">+{{=toThousands(it[k].amount)}}</span>
+              {{ }else{ }}
+                <span class="color2">-{{=toThousands(it[k].amount)}}</span>
+              {{ } }}
+            </div>
+            <div class="row_b">
+              <span>{{= it[k].updateTime}}</span>
+              <span>AIB</span>
+            </div>
+          </div>
+          <div class="blank"></div>
+        {{ } }}
+        {{ if(it[k].payType == '26'){ }}
+          <div class="row">
+            <div class="row_t row_t2">
+              <span>邀请三级返利</span>
+              {{ if(it[k].inOrOut == '01'){ }}
+                <span class="color1">+{{=toThousands(it[k].amount)}}</span>
+              {{ }else{ }}
+                <span class="color2">-{{=toThousands(it[k].amount)}}</span>
+              {{ } }}
+            </div>
+            <div class="row_b">
+              <span>{{= it[k].updateTime}}</span>
+              <span>AIB</span>
+            </div>
+          </div>
+          <div class="blank"></div>
+        {{ } }}
+        {{ if(it[k].payType == '27'){ }}
+          <div class="row">
+            <div class="row_t row_t2">
+              <span>服务中心分红</span>
+              {{ if(it[k].inOrOut == '01'){ }}
+                <span class="color1">+{{=toThousands(it[k].amount)}}</span>
+              {{ }else{ }}
+                <span class="color2">-{{=toThousands(it[k].amount)}}</span>
+              {{ } }}
+            </div>
+            <div class="row_b">
+              <span>{{= it[k].updateTime}}</span>
+              <span>AIB</span>
+            </div>
+          </div>
+          <div class="blank"></div>
+        {{ } }}
+        {{ if(it[k].payType == '02'){ }}
+          <div class="row">
+            <div class="row_t row_t2">
+              <span>平台内部转账</span>
+              {{ if(it[k].inOrOut == '01'){ }}
+                <span class="color1">+{{=toThousands(it[k].amount)}}</span>
+              {{ }else{ }}
+                <span class="color2">-{{=toThousands(it[k].amount)}}</span>
+              {{ } }}
+            </div>
+            <div class="row_b">
+              <span>{{= it[k].updateTime}}</span>
+              <span>AIB</span>
+            </div>
+          </div>
+          <div class="blank"></div>
+        {{ } }}
+        {{ if(it[k].payType == '24'){ }}
+          <div class="row">
+            <div class="row_t row_t2">
+              <span>答题奖励</span>
+              {{ if(it[k].inOrOut == '01'){ }}
+                <span class="color1">+{{=toThousands(it[k].amount)}}</span>
+              {{ }else{ }}
+                <span class="color2">-{{=toThousands(it[k].amount)}}</span>
+              {{ } }}
+            </div>
+            <div class="row_b">
+              <span>{{= it[k].updateTime}}</span>
+              <span>AIB</span>
+            </div>
+          </div>
+          <div class="blank"></div>
+        {{ } }}
+
       {{ } }}
     {{ }else{ }}
 
