@@ -344,39 +344,43 @@ apiready = function () {
   fnReady()
   getHistory()
   getRequest('question/getTagConfig','',function(ret){
-    var textTag = ret.data.textTag;
-    var picData = ret.data.picTag;
-    for(var tag in textTag){
-      myMap.set(textTag[tag].tag, textTag[tag].name);
-      myMapval.set(textTag[tag].name, textTag[tag].tag);
-    }
-    for(var tag in picData){
-      picTag.set(picData[tag].tag, picData[tag].name);
-      picTagval.set(picData[tag].name, picData[tag].tag);
-      picName.push(picData[tag].name);
-    }
-    // myMap.set("key", "value");
-    // console.log(JSON.stringify(picTag.get('/m/011k07')))
-    // console.log(JSON.stringify(picName))
-    getRequest('question/getQuestion','',function(ret){
-      if(ret.data && ret.data.length > 0){
-          questionL = ret.data.length;
-          let conditionals = doT.template($api.dom('#containTmpl').innerHTML);
-          $("#todaySummary").before(conditionals(ret.data));
-          // console.log(JSON.stringify(ret.data));
-      } else {
-          // 无数据
-          let Tmpl = doT.template($api.dom('#Tmpl').innerHTML);
-          $api.dom('#conditionals').innerHTML = Tmpl(ret.data);
+    if(ret.flag === true){
+      var textTag = ret.data.textTag;
+      var picData = ret.data.picTag;
+      for(var tag in textTag){
+        myMap.set(textTag[tag].tag, textTag[tag].name);
+        myMapval.set(textTag[tag].name, textTag[tag].tag);
       }
+      for(var tag in picData){
+        picTag.set(picData[tag].tag, picData[tag].name);
+        picTagval.set(picData[tag].name, picData[tag].tag);
+        picName.push(picData[tag].name);
+      }
+      // myMap.set("key", "value");
+      // console.log(JSON.stringify(picTag.get('/m/011k07')))
+      // console.log(JSON.stringify(picName))
+      getRequest('question/getQuestion','',function(ret){
+        if(ret.data && ret.data.length > 0){
+            questionL = ret.data.length;
+            let conditionals = doT.template($api.dom('#containTmpl').innerHTML);
+            $("#todaySummary").before(conditionals(ret.data));
+            // console.log(JSON.stringify(ret.data));
+        } else {
+            // 无数据
+            let Tmpl = doT.template($api.dom('#Tmpl').innerHTML);
+            $api.dom('#conditionals').innerHTML = Tmpl(ret.data);
+        }
 
-      api.parseTapmode();
-      // 计算题目盒子高度
-      $('.question').height($("#home").height() - $('#header').height() - $('.contain_footer').height() - 30)
-      $('.questH').height($("#home").height() - $('#header').height() + 27)
-      fnChange()
+        api.parseTapmode();
+        // 计算题目盒子高度
+        $('.question').height($("#home").height() - $('#header').height() - $('.contain_footer').height() - 30)
+        $('.questH').height($("#home").height() - $('#header').height() + 27)
+        fnChange()
 
-    })
+      })
+    }else{
+      api.toast({msg: ret.errMsg});
+    }
   })
   api.addEventListener({
       name: 'myEvent'

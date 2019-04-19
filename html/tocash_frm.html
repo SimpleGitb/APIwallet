@@ -24,17 +24,17 @@
     <div class="wrap">
       <div class="blank"></div>
       <div class="wrap_top">
-        <div class="adress">您的AIB充值地址:</div>
-        <div class="ethadress"><input id="CashAddress" placeholder="请输入您AIB的提现地址"></div>
+        <div class="adress">AIB转账账号/地址:</div>
+        <div class="ethadress"><input id="CashAddress" placeholder="请输入AIB转账账号/地址"></div>
         <div class="blank_3"></div>
-        <div class="adress">输入您的提现数量(当前手续费：25%):</div>
-        <div class="ethadress"><input id="tocashnum" placeholder="单行输入"></div>
+        <div class="adress">请输入您的转账数量(如果是体现手续费：25%):</div>
+        <div class="ethadress"><input id="tocashnum" placeholder="请输入您的转账数量"></div>
         <div class="blank_3"></div>
         <div class="btn" onclick="toCash()">确认提现</div>
       </div>
       <div class="blank"></div>
       <div class="wrap_b" >
-        <div class="title">充值记录</div>
+        <div class="title">转账记录</div>
         <div id="tocash" id="tocash">
 
         </div>
@@ -101,6 +101,7 @@
                 accessToken:userInfo.token},
               function(ret){
               if(ret.flag ==true){
+                api.toast({ msg: '提现成功' }); 
                 api.sendEvent({
                     name: 'update',
                 });
