@@ -33,7 +33,7 @@
     <div class="wrap">
       <div class="blank"></div>
       <div class="wrap_top">
-        <div class="adress">您的AIB充值地址:<span id="site" onclick="copyArticle('site')"></span></div>
+        <div class="adress">您的AIB充值地址:<span id="site" onclick="copyArticle()"></span></div>
         <div class="ethadress" id="address">
 
         </div>
@@ -108,13 +108,16 @@
       };
 
       function copyArticle(event) {    
-			const range = document.createRange();    
-			range.selectNode(document.getElementById(event));    
-			const selection = window.getSelection();    
-			if(selection.rangeCount > 0) selection.removeAllRanges();    
-			selection.addRange(range);         
-			document.execCommand('copy');
-			api.toast({ msg: '已复制' });
+        var text =document.getElementById("site").innerText;
+        var input = document.createElement('input');
+        input.setAttribute('id', 'copyInput');
+        input.setAttribute('value', text);
+        document.getElementsByTagName('body')[0].appendChild(input);
+        document.getElementById('copyInput').select();
+        if (document.execCommand('copy')) {
+            api.toast({ msg: '已复制' });
+        }
+        document.getElementById('copyInput').remove();
 		}
   </script>
   </html>

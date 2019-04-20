@@ -129,6 +129,9 @@
               if(ret.flag === true){
                 $api.setStorage('password', list[2]);
                 api.toast({msg: '资金密码设置成功'});
+                setTimeout(function(){
+                  api.closeWin();
+                },1000)
               }else {
                 api.toast({msg: ret.errMsg});
               }

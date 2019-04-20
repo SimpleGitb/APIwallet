@@ -164,9 +164,6 @@ function getRequest(url,params,callback) {
     if(ret.errCode == "1201"){
       $api.rmStorage('userInfo');
       $api.rmStorage('password');
-      // api.closeFrameGroup({
-      //     name: 'group'
-      // });
       api.closeToWin({
           name: 'root'
       });

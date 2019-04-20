@@ -32,12 +32,17 @@
             margin-right: .19rem;
             vertical-align: middle;
           }
+          .about{
+            margin-left: 1.6rem;
+            color: #404249;
+          }
           .more{
             float: right;
             width: .08rem;
             height: .12rem;
             margin: 0;
             margin-right:.15rem;
+            margin-top: 0.03rem;
           }
           .blank{
             float: right;
@@ -64,6 +69,7 @@
       <div class="row">
         <img src="../image/about.png">
         <span>关于</span>
+        <span class="about"></span>
         <img class='more' src="../image/arrow_right.png">
       </div>
       <div class="blank" style="width:100%"></div>
@@ -75,9 +81,10 @@
   </body>
   <script type="text/javascript" src="../script/api.js"></script>
   <script type="text/javascript" src="../script/common.js"></script>
+  <script type="text/javascript" src="../script/zepto.min.js"></script>
   <script type="text/javascript">
       apiready = function(){
-
+        $api.text($api.dom('.about'), '版本号 '+api.appVersion);
       };
       function closeapp() {
         // api.closeWin();
@@ -89,6 +96,6 @@
         api.closeToWin({
             name: 'root'
         });
-      }
+      };
   </script>
   </html>

@@ -61,10 +61,12 @@
         .wrap {
             position: absolute;
             width: 92%;
+            top: 1.7rem;
             bottom: .2rem;
             left: 4%;
             background: #fff;
             border-radius: .26666rem;
+            min-height: 5rem;
         }
 
         .contain_head {
@@ -274,8 +276,10 @@
           {{ } }}
           {{ if(it[k].taskType == '2'){ }}
           <div class="audio">
-            <audio src="{{= it[k].taskMedia }}" controls="controls">
-              Your browser does not support the audio tag.
+            <audio id="myAudio" controls>
+            <source src="{{= it[k].taskMedia }}" type="audio/ogg">
+            <source src="{{= it[k].taskMedia }}" type="audio/mpeg">
+            您的浏览器不支持 audio 与元素。
             </audio>
           </div>{{ } }}
           {{ if(it[k].taskType == '3'){ }}
@@ -283,7 +287,7 @@
           {{ } }}
           {{ if(it[k].answerType == '1'){ }}
             {{ for(let i in it[k].options) { }}
-              <div class="row" tapmode onclick="check(this)">
+              <div class="row" tapmode onclick="check(this,'{{=it[k].taskId}}','{{=parseInt(i)}}')">
                 <div class="check"></div><span>{{= maskText(it[k].options[i])}}</span>
               </div>
             {{ } }}
@@ -299,7 +303,8 @@
 
         </div>
         <div class="contain_footer">
-          <div class="swiper-next btn" tapmode onclick="router('{{= it[k].taskId }}','{{= it[k].scrollId }}','{{= parseInt(k)+1 }}')">确认</div>
+          <input class="btn exportCameraButton" type="button" value="确认" onclick="router('{{= it[k].taskId }}','{{= it[k].scrollId }}','{{= parseInt(k)+1 }}')">
+          <!-- <div class="swiper-next btn" tapmode onclick="router('{{= it[k].taskId }}','{{= it[k].scrollId }}','{{= parseInt(k)+1 }}')">确认</div> -->
         </div>
       </div>
       {{ } }}
@@ -338,12 +343,13 @@
 <script type="text/javascript" src="../script/common.js"></script>
 <script>
 let summary,
-    questionL = 0,values;
+    questionL = 0,values,optionData,optiontaskId,optionansId;
 var myMap = new Map();
 var myMapval = new Map();
 var picTag = new Map();
 var picTagval = new Map();
 var picName = [];
+var commitTime = 0,commitTimenext = 0;
 apiready = function () {
   fnReady()
   getHistory()
@@ -368,7 +374,8 @@ apiready = function () {
             questionL = ret.data.length;
             let conditionals = doT.template($api.dom('#containTmpl').innerHTML);
             $("#todaySummary").before(conditionals(ret.data));
-            // console.log(JSON.stringify(ret.data));
+            console.log(JSON.stringify(ret.data));
+            optionData = ret.data;
         } else {
             // 无数据
             let Tmpl = doT.template($api.dom('#Tmpl').innerHTML);
@@ -377,7 +384,7 @@ apiready = function () {
 
         api.parseTapmode();
         // 计算题目盒子高度
-        $('.question').height($("#home").height() - $('#header').height() - $('.contain_footer').height() - 30)
+        $('.question').height($("#home").height() - $('#header').height() - $('.contain_footer').height() - 100)
         $('.questH').height($("#home").height() - $('#header').height() + 27)
         fnChange()
 
@@ -400,6 +407,7 @@ apiready = function () {
   }, function(ret, err) {
       location.reload()
   });
+
 }
 var maskText = function(text) {
     if(text.slice(0,1) == '/'){
@@ -468,7 +476,7 @@ var taskpicMatch = function(picVal){
 function getHistory(callback){
   getRequest('question/todaySummary','',function(ret){
     if(ret && ret.flag){
-      $api.dom('#monthReward').innerHTML = ret.data.monthReward
+      $api.dom('#monthReward').innerHTML = ret.data.monthReward;
       $api.dom('#historyAccuracy').innerHTML = (parseFloat(ret.data.historyAccuracy) * 100).toFixed(2);
       let todayTmpl = doT.template($api.dom('#todayTmpl').innerHTML);
       $api.dom('#todaySummary').innerHTML = todayTmpl(ret.data)
@@ -482,9 +490,11 @@ function getHistory(callback){
 }
 
 // 答案选择
-function check(that){
+function check(that,taskId,optionId){
     $('.row').removeClass('active')
-    $(that).addClass('active')
+    $(that).addClass('active');
+    optiontaskId = taskId;
+    optionansId = optionId;
 }
 
 // 初始化Swiper
@@ -506,17 +516,28 @@ function fnChange() {
 
 // 切换下一题
 function nextQuestion(){
-  $('.row').removeClass('active');
-  if($api.dom('#selectlabel')){
-    $api.dom('#selectlabel').innerHTML = "请选择标签";
-  }
-  $('.textarea').val('');
-  mySwiper.allowSlideNext = true
-  mySwiper.slideNext();
+    mySwiper.allowSlideNext = true
+    mySwiper.slideNext();
+    $('.row').removeClass('active');
+    if($api.dom('#selectlabel')){
+      $api.dom('#selectlabel').innerHTML = "请选择标签";
+    }
+    $('.textarea').val('');
 }
 
 // 提交答案
+
 function router(taskId,scrollId,index){
+  if(commitTime == 0){
+    commitTime = 1;
+    console.log(commitTime)
+    $(".exportCameraButton").attr("disabled","disabled");
+    setTimeout(function(){
+      commitTime = 0;
+      $(".exportCameraButton").removeAttr("disabled");
+      console.log(commitTime)
+    },3000)
+  }
   let answer = $('.active').find('span').html();
   let answer2 = $('#selectlabel').html();
   let answer3 = "";
@@ -545,42 +566,54 @@ function router(taskId,scrollId,index){
     console.log(answerSumit)
     answerSumit = answerSumit.split(";");
     if(answerSumit.length>1){
-      var answerSumitTip = "";
-      for(var t=0;t< answerSumit.length-1;t++){
-        answerSumitTip += myMapval.get(String(answerSumit[t]))+";";
-        // console.log(myMapval.get(String(answerSumit[t])))
+      for(var t = 0;t<optionData.length;t++){
+        if(optionData[t].taskId == optiontaskId){
+          // console.log(optionData[t].options[optionansId])
+          answerSumit = optionData[t].options[optionansId];
+        }
       }
-      answerSumit = answerSumitTip;
+
     }else {
       if(picTagval.get(String(answerSumit))){
         answerSumit = picTagval.get(String(answerSumit));
+        answerSumit = answerSumit.join(";")
       }
       if(myMapval.get(String(answerSumit))){
-        answerSumit = myMapval.get(String(answerSumit));
+        for(var t = 0;t<optionData.length;t++){
+          if(optionData[t].taskId == optiontaskId){
+            // console.log(optionData[t].options[optionansId])
+            answerSumit = optionData[t].options[optionansId];
+          }
+        }
       }
     }
 
     console.log(answerSumit);
-    postRequest('question/submitAnswer',{
-        taskId: taskId,
-        scrollId: scrollId,
-        answer: answerSumit
-    },function(ret){
-      if (ret && ret.flag) {
-        if(questionL == index){
-          getHistory(nextQuestion())
-        } else {
-          nextQuestion()
-        }
-      } else {
-        api.toast({ msg: ret.errMsg });
-      }
-    })
+    commitMethods(taskId,scrollId,index,answerSumit);
+
+
   } else {
-    api.toast({ msg: '您还未选择答案' });
+    api.toast({ msg: '您还未作答' });
   }
 }
-
+function commitMethods(taskId,scrollId,index,answerSumit){
+  console.log(String(answerSumit));
+  postRequest('question/submitAnswer',{
+      taskId: taskId,
+      scrollId: scrollId,
+      answer: String(answerSumit)
+  },function(ret){
+    if (ret && ret.flag) {
+      if(questionL == index){
+          getHistory(nextQuestion())
+      } else {
+          nextQuestion()
+      }
+    } else {
+      api.toast({ msg: ret.errMsg });
+    }
+  })
+}
 // 查看历史
 function Cathistory() {
   api.openWin({

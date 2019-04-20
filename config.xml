@@ -23,7 +23,7 @@
 	<permission name="readPhoneState" />
 	<permission name="camera" />
 	<permission name="record" />
-	<permission name="location" />
+	<!-- <permission name="location" /> -->
 	<permission name="fileSystem" />
 	<permission name="internet" />
 	<permission name="bootCompleted" />
