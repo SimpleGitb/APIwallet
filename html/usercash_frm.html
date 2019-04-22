@@ -65,7 +65,7 @@
           </div>
           <div class="row_b">
             <span>{{= it[k].updateTime}}</span>
-            <span>AIB</span>
+            <span>MYAI</span>
           </div>
         </div>
         <div class="blank_2"></div>
@@ -166,7 +166,7 @@
               postRequest('trade',{fromAccount:userInfo.address,
                   toAccount: $api.val($api.dom('#CashAddress')),
                   money: $api.val($api.dom('#tocashnum')),
-                  currecy:'AIB',
+                  currecy:'MYAI',
                   password:enced,
                   accessToken:userInfo.token},
                   function(ret){

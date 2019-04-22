@@ -235,7 +235,7 @@
                   <div class="tit">当月累计收益</div>
                   <div class="info">
                       <span class="big" id="monthReward">0</span>
-                      <span class="small">AIB</span>
+                      <span class="small">MYAI</span>
                   </div>
               </div>
               <div class="title_box">
@@ -262,7 +262,7 @@
         <div class="contain_head">
           <span class="contain_head_l">{{= parseInt(k)+1 }}/{{= it.length }}</span>
           <span class="contain_head_c">第{{= rp(parseInt(k)+1) }}题</span>
-          <span class="contain_head_r">价值:{{= it[k].bonus }}AIB</span>
+          <span class="contain_head_r">价值:{{= it[k].bonus }}MYAI</span>
         </div>
         <div class="question">
           {{ if(it[k].taskType == '1'){ }}
@@ -319,7 +319,7 @@
     <div class="result_title">今日题目已答完<span>请休息一下吧</span></div>
     <ul class="result_list">
         <li>
-            <span class="result_l">今日收益(AIB)</span>
+            <span class="result_l">今日收益(MYAI)</span>
             <span class="result_r">{{= it.todayReward }}</span>
         </li>
         <li>
@@ -576,7 +576,6 @@ function router(taskId,scrollId,index){
     }else {
       if(picTagval.get(String(answerSumit))){
         answerSumit = picTagval.get(String(answerSumit));
-        answerSumit = answerSumit.join(";")
       }
       if(myMapval.get(String(answerSumit))){
         for(var t = 0;t<optionData.length;t++){

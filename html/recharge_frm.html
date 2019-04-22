@@ -33,7 +33,7 @@
     <div class="wrap">
       <div class="blank"></div>
       <div class="wrap_top">
-        <div class="adress">您的AIB充值地址:<span id="site" onclick="copyArticle()"></span></div>
+        <div class="adress">您的MYAI充值地址:<span id="site" onclick="copyArticle()"></span></div>
         <div class="ethadress" id="address">
 
         </div>
@@ -63,7 +63,7 @@
           </div>
           <div class="row_b">
             <span>{{= it[k].updateTime}}</span>
-            <span>AIB</span>
+            <span>MYAI</span>
           </div>
         </div>
         <div class="blank_2"></div>
@@ -88,7 +88,7 @@
         qrcode.makeCode(address);
         $api.dom('#site').innerHTML = address;
         var param ={
-          currency:'AIB',
+          currency:'MYAI',
           currentPageNo:'1'
         }
         postRequest('getTransactionRecordList',param,function (ret){
