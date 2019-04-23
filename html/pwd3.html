@@ -109,7 +109,7 @@
   <script type="text/javascript">
 
       apiready = function(){
-        let buypwd = $api.getStorage('password');
+        // let buypwd = $api.getStorage('password');
         // var emalipay = api.pageParam.emalipay;
         // return;
         var $input = $(".fake-box input");
@@ -126,7 +126,7 @@
             }
           });
           if (len == 6) {
-            if(pwd == buypwd){
+            if(pwd){
               api.execScript({
                   frameName: 'tocash_frm',
                   script: 'payCallback('+ pwd +');'
