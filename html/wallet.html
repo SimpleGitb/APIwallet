@@ -169,9 +169,18 @@
   function update(){
     postRequest('getAccountBalance',{accessToken:userInfo.token},function (ret) {
       if(ret.flag ==true && ret){
-        console.log(JSON.stringify(ret.data))
+        var acountcost;
+        for(var i = 0;i<ret.data.length;i++){
+          if(ret.data[i].currency == "AIB"){
+            if(typeof ret.data[i].freezeAmount == 'number' ){
+              acountcost = Number(ret.data[i].amount)-Number(ret.data[i].freezeAmount)
+            }else {
+              acountcost = ret.data[i].amount;
+            }
+          }
+        }
         let numtmpl = doT.template($api.byId('numtmpl').innerHTML);
-        $api.byId('num').innerHTML = numtmpl(ret.data[0]);
+        $api.byId('num').innerHTML = numtmpl(parseInt(acountcost));
       }
     })
   }
