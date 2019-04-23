@@ -140,7 +140,7 @@
             }, function(ret, err) {
               consloe.log()
                 if (ret.status) {
-                    api.alert({msg: '分享成功'});
+                    // api.alert({msg: '分享成功'});
                 } else {
                   api.alert({msg: '用户取消分享'});
                 }
@@ -161,7 +161,7 @@
                     text: '我分享的文本'
                 }, function(ret, err) {
                     if (ret.status) {
-                        api.alert({msg: '分享成功'});
+                        // api.alert({msg: '分享成功'});
                     } else {
                       api.alert({msg: '用户取消分享'});
                     }
@@ -180,7 +180,7 @@
                     text: '二维码'
                 },function(ret,err){
                   if (ret.status){
-                    alert("分享成功！");
+                    // alert("分享成功！");
                   } else {
                     api.alert({msg: '用户取消分享'});
                   }

@@ -129,14 +129,11 @@ function postRequest(url,params,callback) {
   }, function(ret, err) {
       api.hideProgress();
       if(ret.errCode == "1201"){
-        $api.rmStorage('userInfo');
-        $api.rmStorage('password');
-        // api.closeFrameGroup({
-        //     name: 'group'
-        // });
         api.closeToWin({
             name: 'root'
         });
+        $api.rmStorage('userInfo');
+        $api.rmStorage('password');
       }
       if (ret) {
           if (typeof callback == 'function') {
@@ -162,11 +159,11 @@ function getRequest(url,params,callback) {
   }, function(ret, err) {
     api.hideProgress();
     if(ret.errCode == "1201"){
-      $api.rmStorage('userInfo');
-      $api.rmStorage('password');
       api.closeToWin({
           name: 'root'
       });
+      $api.rmStorage('userInfo');
+      $api.rmStorage('password');
     }
       if (ret) {
           if (typeof callback == 'function') {

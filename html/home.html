@@ -374,7 +374,7 @@ apiready = function () {
             questionL = ret.data.length;
             let conditionals = doT.template($api.dom('#containTmpl').innerHTML);
             $("#todaySummary").before(conditionals(ret.data));
-            console.log(JSON.stringify(ret.data));
+            // console.log(JSON.stringify(ret.data));
             optionData = ret.data;
         } else {
             // 无数据
@@ -475,6 +475,7 @@ var taskpicMatch = function(picVal){
 // 获取历史记录
 function getHistory(callback){
   getRequest('question/todaySummary','',function(ret){
+    console.log(JSON.stringify(ret))
     if(ret && ret.flag){
       $api.dom('#monthReward').innerHTML = ret.data.monthReward;
       $api.dom('#historyAccuracy').innerHTML = (parseFloat(ret.data.historyAccuracy) * 100).toFixed(2);
