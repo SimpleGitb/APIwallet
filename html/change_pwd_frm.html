@@ -175,10 +175,18 @@
           return;
         }
         if(list[2] !== list[3]){
-          api.toast({  msg: '俩次输入的密码不一致',});
+          api.toast({  msg: '两次输入的密码不一致',});
           return;
         }
         getRequest('setLoginPassword','&loginPassword='+list[2]+'&type=2&address='+list[0]+'&code='+list[1],function(ret) {
+          if(ret.flag === true){
+            api.toast({msg: '修改成功'});
+            setTimeout(function(){
+              api.closeWin();
+            },1000)
+          }else {
+            api.toast({msg: ret.errMsg});
+          }
         })
       }
   </script>

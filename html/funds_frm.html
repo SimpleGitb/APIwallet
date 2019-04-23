@@ -102,7 +102,7 @@
           return;
         }
         if(list[2] !== list[3]){
-          api.toast({  msg: '俩次输入的密码不一致',});
+          api.toast({  msg: '两次输入的密码不一致',});
           return;
         }
         postRequest('getAeskey',{accessToken:token},function (ret) {
