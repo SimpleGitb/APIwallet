@@ -101,7 +101,7 @@
                     <img src="../image/pengyouquan.png" />
                     <span>朋友圈</span>
                 </div>
-                <div class="row">
+                <div class="row" onclick="weibo()">
                     <img src="../image/weibo.png" />
                     <span>微博</span>
                 </div>
@@ -158,7 +158,8 @@
                 wx.shareText({
                     apiKey: 'wx108f39d9b23a4bcd',
                     scene: 'timeline',
-                    text: '我分享的文本'
+                    thumb: 'widget://image/QQ.png',
+                    contentUrl: 'widget://image/QQ.png'
                 }, function(ret, err) {
                     if (ret.status) {
                         // api.alert({msg: '分享成功'});
@@ -176,8 +177,9 @@
         var qq = api.require('QQPlus');
         qq.installed(function(ret, err){
             if (ret.status) {
-                qq.shareText({
-                    text: '二维码'
+              qq.shareImage({
+                  type : 'QFriend',
+                  imgPath: 'widget://image/QQ.png'
                 },function(ret,err){
                   if (ret.status){
                     // alert("分享成功！");
@@ -188,6 +190,21 @@
         }
     })
   }
+
+  function weibo(){
+    var weiboPlus= api.require('weiboPlus');
+    weiboPlus.shareImage({
+        text: '这里是测试的内容',
+        imageUrl: 'widget://image/QQ.png'
+    }, function(ret, err) {
+      if (ret.status){
+        // alert("分享成功！");
+      } else {
+        api.alert({msg: '用户取消分享'});
+      }
+    });
+  }
+
   function qqSpace() {
     var qq = api.require('QQPlus');
     qq.installed(function(ret, err){
