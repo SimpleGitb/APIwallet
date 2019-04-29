@@ -10,7 +10,7 @@
   <body>
     <header id="header">
       <div class="event-back"></div>
-      <div class="nav">MYAI提现</div>
+      <div class="nav">MYAI提现 <span style="position: absolute;right: .15rem;" onclick="feeMethod()">手续费说明</span></div>
     </header>
   </body>
   <script type="text/javascript" src="../script/api.js"></script>
@@ -34,6 +34,12 @@
           bounces:false,
           scaleEnabled:true
       });
+  }
+  function feeMethod(){
+    api.openWin({
+        name: 'handfee_frm',
+        url: './handfee_frm.html'
+    });
   }
   </script>
   </html>

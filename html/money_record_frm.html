@@ -52,6 +52,20 @@
           .color2{
             color: #50D26F !important;
           }
+          .nodata{
+            width: 100%;
+            height: 4rem;
+            text-align: center;
+          }
+          .nodata img{
+            width: 0.6rem;
+            height: .72rem;
+            margin-top: 2rem;
+          }
+          .nomessage{
+            font-size: .15rem;
+            color: #BEBEBE;
+          }
       </style>
   </head>
   <body>
@@ -184,7 +198,10 @@
 
       {{ } }}
     {{ }else{ }}
-
+    <div class="nodata">
+      <img src="../image/no_data.png" alt="">
+      <div class="nomessage">暂无记录</div>
+    </div>
     {{ } }}
   </script>
   <script type="text/javascript" src="../script/api.js"></script>

@@ -147,7 +147,7 @@
             padding:.1rem 0.15rem .4rem;
         }
         .image {
-            width: 2rem;
+            width: 3.45rem;
             min-height: 1.4rem;
             border: 1px #E2E2E2 solid;
             border-radius: 5px;
@@ -353,6 +353,7 @@ var commitTime = 0,commitTimenext = 0;
 apiready = function () {
   fnReady()
   getHistory()
+  
   getRequest('question/getTagConfig','',function(ret){
     if(ret.flag === true){
       var textTag = ret.data.textTag;

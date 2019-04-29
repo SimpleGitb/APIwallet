@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>引导页</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+      <style media="screen">
+        .videoBox{
+          /*width: 3.75rem;*/
+          width: 100%;
+          height: 100%;
+        }
+        video{
+          width: 100%;
+          height: 100%;
+        }
+        video::-webkit-media-controls-enclosure{ overflow: hidden; }
+
+        video::-webkit-media-controls-panel{ width: calc(100% + 30px); }
+      </style>
+
+  </head>
+  <body>
+    <div class="videoBox">
+      <video autoplay id="video">
+        <source src="../image/7fcd27f44094684a0b94c62efa6b4b01.mp4"></source>
+      </video>
+    </div>
+
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <!-- <script type="text/javascript" src="../script/zepto.min.js"></script>
+  <script type="text/javascript" src="../script/doT.min.js"></script> -->
+  <script type="text/javascript" src="../script/common.js"></script>
+  <script type="text/javascript">
+  apiready = function() {
+      fnReady();
+      // openFrame();
+  };
+
+//监听播放时间
+var video = document.getElementById('video');
+//使用事件监听方式捕捉事件
+video.addEventListener("timeupdate",function(){
+    var timeDisplay;
+	//用秒数来显示当前播放进度
+	timeDisplay = Math.floor(video.currentTime);
+	// console.log(Math.floor(video.currentTime))
+    //当视频播放到 4s的时候做处理
+	if(timeDisplay == 38){
+      //处理代码
+      // api.openFrame({
+      //     name: 'guideTip',
+      //     url: './guideTip.html',
+      //     rect: {
+      //         x: 'auto',
+      //         y: 'auto',
+      //     },
+      //     bounces: false,
+      // });
+      api.openWin({
+          name: 'guideTip',
+          url: './guideTip.html'
+      });
+	}
+},false);
+// function onended(){  播放完成
+//
+// }
+  </script>
+  </html>

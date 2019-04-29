@@ -86,7 +86,15 @@
             }
         });
         if(userInfo){
-          fnOpenMain()
+          if($api.getStorage('guidebool') == '0'){
+            api.openWin({
+                name: 'guidePage',
+                url: './html/guidePage.html',
+                bounces: false
+            });
+          }else {
+            fnOpenMain()
+          }
         } else {
           $api.rmStorage('userInfo');
         };
@@ -121,10 +129,20 @@
       }
       postRequest('newLogin',param,function(ret) {
         if(ret.flag === true){
-          setUserInfo(ret.data)
-            // console.log(JSON.stringify($api.getStorage('userInfo')));
-            fnOpenMain();
+            setUserInfo(ret.data);
+            console.log(JSON.stringify(ret));
+            if(ret.data.hasScroll == false){
+              $api.setStorage('guidebool','0');
+              api.openWin({
+                  name: 'guidePage',
+                  url: './html/guidePage.html',
+                  bounces: false
+              });
+            }else {
+              fnOpenMain();
+            }
         }else{
+          console.log(JSON.stringify(ret));
           api.toast({msg: ret.errMsg});
         }
       })

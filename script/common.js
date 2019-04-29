@@ -1,4 +1,4 @@
-const APIURL = 'http://36.33.216.16:28080/app-rest/';
+const APIURL = 'http://116.213.143.67:48085/app-rest/';
 let userInfo;
 //公共方法 （按钮返回事件，打开新的窗口，导航下移）
 function fnReady() {

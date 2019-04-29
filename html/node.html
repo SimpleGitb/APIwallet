@@ -31,6 +31,7 @@
           width:100%;
         }
         .share{ width: .18rem; height: .18rem; margin-right: .1rem;}
+        .imgdetail{width: .10rem;height: .10rem;margin-left: .10rem}
     </style>
 </head>
 <body>
@@ -72,7 +73,7 @@
     </script>
     <script type="text/template" id="servicetmpl">
       {{if(parseInt(it.rank) != 0){ }}
-      <div class="title title2"><div class="title_left"><img class='img' src='../image/service.png'><span>服务中心</span></div><img class='right' src='../image/more2.png'></div>
+      <div class="title title2"><div class="title_left"><img class='img' src='../image/service.png'><span>服务中心<img onclick="servicrDetali()" class='imgdetail' src='../image/detail.png'></span></div><img class='right' src='../image/more2.png'></div>
       <div class="info">
         <div class="top">
           <span>贡献总值：</span>{{= parseInt(it.minorBranchTotalProfit)+parseInt(it.mainBranchTotalProfit)}}
@@ -148,6 +149,13 @@
           api.openWin({
               name: 'share_win',
               url: './share_win.html',
+              bounces:false,
+          });
+        }
+        function servicrDetali(){
+          api.openWin({
+              name: 'serviceDetail_frm',
+              url: './serviceDetail_frm.html',
               bounces:false,
           });
         }
