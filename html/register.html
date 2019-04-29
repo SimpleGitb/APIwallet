@@ -181,6 +181,7 @@ var handler = function (captchaObj) {
         }
     });
     $('#sendCode').click(function () {
+      console.log('21')
       let address = $api.val($api.byId('email'))
       let Email = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
       if(address == ''){
@@ -198,7 +199,7 @@ var handler = function (captchaObj) {
     // 更多前端接口说明请参见：http://docs.geetest.com/install/client/web-front/
 };
 $.ajax({
-    url: "http://36.33.216.16:28080/app-rest/verification?t=" + (new Date()).getTime(), // 加随机数防止缓存
+    url: "http://116.213.143.67:48085/app-rest/verification?t=" + (new Date()).getTime(), // 加随机数防止缓存
     type: "post",
     dataType: "json",
     data:{
