@@ -102,10 +102,7 @@
         .swiper-slide {
           overflow: hidden;
         }
-        .question {
-            padding: 0 .15rem;
-            overflow-y:auto;
-        }
+
         .contain_title {
           font-size: .16rem;
           line-height: .22rem;
@@ -240,6 +237,11 @@
         .quesnone{
           margin-top: 1rem;
           text-align: center;
+        }
+        .question {
+            padding: 0 .15rem;
+            height: 4.3rem;
+            overflow-y:auto;
         }
     </style>
 </head>
@@ -405,8 +407,8 @@ apiready = function () {
 
         api.parseTapmode();
         // 计算题目盒子高度
-        $('.question').height($("#home").height() - $('#header').height() - $('.contain_footer').height() - 100)
-        $('.questH').height($("#home").height() - $('#header').height() + 27)
+        // $('.question').height($("#home").height() - $('#header').height() - $('.contain_footer').height() - 100)
+        // $('.questH').height($("#home").height() - $('#header').height() + 27)
         fnChange()
 
       })
