@@ -108,15 +108,20 @@
   var picName = [];
   apiready = function() {
       fnReady();
-      getRequest('question/getTagConfig','',function(ret){
-        var picData = ret.data.picTag;
-        for(var tag in picData){
-          picName.push(picData[tag].name);
-        }
+      if($api.getStorage('picName')){
         let conditionals = doT.template($api.dom('#containTmpl').innerHTML);
-        $("#selectLabel").html(conditionals(picName));
-      });
-
+        $("#selectLabel").html(conditionals($api.getStorage('picName')));
+      }else {
+        getRequest('question/getTagConfig','',function(ret){
+          var picData = ret.data.picTag;
+          for(var tag in picData){
+            picName.push(picData[tag].name);
+          }
+          let conditionals = doT.template($api.dom('#containTmpl').innerHTML);
+          $("#selectLabel").html(conditionals(picName));
+          $api.setStorage('picName',picName);
+        });
+      }
   };
   // 答案选择
   function check(that){

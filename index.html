@@ -40,9 +40,7 @@
           $api.val($api.byId('tel'),$api.getStorage('mail') || '')
         }
         fnReady()
-        api.addEventListener({
-            name: 'keyback'
-        }, function(ret, err){});
+        exitApp();
 
         api.readFile({
             path: './build.xml'
@@ -169,5 +167,28 @@
           slidBackEnabled: false,
       });
     };
+    function exitApp(){
+      api.addEventListener({
+        name: 'keyback'
+      }, function(ret, err){
+        api.toast({
+          msg: '再次点击返回键退出APP',
+          duration:2000,
+          location: 'bottom'
+        });
+
+        api.addEventListener({
+          name: 'keyback'
+        }, function(ret, err){
+          api.closeWidget({
+            id: 'A6000006819054',
+            silent:true
+          });
+        });
+        setTimeout(function(){
+          exitApp();
+        },3000)
+      });
+    }
 </script>
 </html>

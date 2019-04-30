@@ -93,9 +93,7 @@
 <script type="text/javascript">
     apiready = function() {
         funIniGroup()
-        api.addEventListener({
-            name: 'keyback'
-        }, function(ret, err){});
+        exitApp();
     }
     function funIniGroup() {
         var eFootLis = $api.domAll('#footer li'),
@@ -145,5 +143,27 @@
             reload: true
         });
     }
+    function exitApp(){
+      api.addEventListener({
+        name: 'keyback'
+      }, function(ret, err){
+        api.toast({
+          msg: '再次点击返回键退出APP',
+          duration:2000,
+          location: 'bottom'
+        });
 
+        api.addEventListener({
+          name: 'keyback'
+        }, function(ret, err){
+          api.closeWidget({
+            id: 'A6000006819054',
+            silent:true
+          });
+        });
+        setTimeout(function(){
+          exitApp();
+        },3000)
+      });
+    }
 </script>

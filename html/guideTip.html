@@ -48,6 +48,9 @@
   apiready = function() {
       fnReady();
       // openFrame();
+      api.addEventListener({
+          name: 'keyback'
+      }, function(ret, err){});
   };
 function rePlay(){
   api.closeWin({

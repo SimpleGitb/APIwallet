@@ -38,6 +38,9 @@
   apiready = function() {
       fnReady();
       // openFrame();
+      api.addEventListener({
+          name: 'keyback'
+      }, function(ret, err){});
   };
 
 //监听播放时间

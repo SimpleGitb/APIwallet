@@ -89,11 +89,11 @@
 <script type="text/javascript" src="../script/doT.min.js"></script>
 <script type="text/javascript">
     apiready = function() {
-      postRequest('getAppVersionByType',{apptype:'ios'},function (ret) {
+      getRequest('getActivityListByAccount','',function (ret) {
         if(ret.flag ==true && ret){
           console.log(JSON.stringify(ret.data))
           let messageTmpl = doT.template($api.byId('messageTmpl').innerHTML);
-          $api.byId('message').innerHTML = messageTmpl(ret.data.rows);
+          $api.byId('message').innerHTML = messageTmpl(ret.data);
         }
       })
     };
