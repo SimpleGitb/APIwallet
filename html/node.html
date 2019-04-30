@@ -20,7 +20,7 @@
         .title2{ background: #EFF3FF; border-top-left-radius: .1rem; border-top-right-radius: .1rem;}
         .img{width: .16rem; height: .14rem; margin: 0 .1rem 0 .18rem;}
         .scrollcenter{ color: #fff;}
-        .title_left{ display: flex; align-items: center;}
+        .title_left{ display: flex; align-items: center;vertical-align: middle;}
         .right{ float: right;width: .10rem; height: .14rem; margin-right:.14rem; }
         .blank{ height: .01rem; background:#4C7AFE; margin: 0 .15rem;}
         .info{ padding: 0.12rem 0 .12rem .15rem; color:#FF5656; }
@@ -73,7 +73,7 @@
     </script>
     <script type="text/template" id="servicetmpl">
       {{if(parseInt(it.rank) != 0){ }}
-      <div class="title title2"><div class="title_left"><img class='img' src='../image/service.png'><span>服务中心<img onclick="servicrDetali()" class='imgdetail' src='../image/detail.png'></span></div><img class='right' src='../image/more2.png'></div>
+      <div class="title title2"><div class="title_left"><img class='img' src='../image/service.png'><span>服务中心</span><img onclick="servicrDetali()" class='imgdetail' src='../image/detail.png'></div><img class='right' src='../image/more2.png'></div>
       <div class="info">
         <div class="top">
           <span>贡献总值：</span>{{= parseInt(it.minorBranchTotalProfit)+parseInt(it.mainBranchTotalProfit)}}
