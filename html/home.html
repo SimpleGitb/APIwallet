@@ -395,7 +395,7 @@ apiready = function () {
             questionL = ret.data.length;
             let conditionals = doT.template($api.dom('#containTmpl').innerHTML);
             $("#todaySummary").before(conditionals(ret.data));
-            console.log(JSON.stringify(ret.data));
+            // console.log(JSON.stringify(ret.data));
             optionData = ret.data;
         } else {
             // 无数据

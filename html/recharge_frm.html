@@ -67,8 +67,8 @@
     <span>{{= it.address }}</span>
   </script>
   <script type='text/template' id='remarkjilvtmpl'>
-    {{ for(let k in it) { }}
-      {{if( it[k].payType =='05'){ }}
+    {{if( it && it.length>0){ }}
+      {{ for(let k in it) { }}
         <div class="row row2">
           <div class="row_t">
             <span class="row_l">充值</span>
@@ -84,12 +84,12 @@
           </div>
         </div>
         <div class="blank_2"></div>
-      {{ }else{ }}
-      <div class="nodata">
-        <img src="../image/no_data.png" alt="">
-        <div class="nomessage">暂无记录</div>
-      </div>
       {{ } }}
+    {{ }else{ }}
+    <div class="nodata">
+      <img src="../image/no_data.png" alt="">
+      <div class="nomessage">暂无记录</div>
+    </div>
     {{ } }}
   </script>
   <script type="text/javascript" src="../script/api.js"></script>
@@ -110,19 +110,17 @@
         qrcode.makeCode(address);
         $api.dom('#site').innerHTML = address;
         var param ={
-          currency:'MYAI',
+          currency:'AIB',
           currentPageNo:'1'
         }
         postRequest('getTransactionRecordList',param,function (ret){
           if(ret.flag ==true && ret){
 
             for (var i = 0; i < ret.data.rows.length; i++) {
-              if(ret.data.rows[i].inOrOut == '01'){
-                console.log(JSON.stringify(ret.data.rows[i]))
+              if(ret.data.rows[i].payType =='05'){
                 remarkdata.push(ret.data.rows[i]);
               }
             }
-            // console.log(JSON.stringify(remarkdata));
             let remarkjilvTmpl = doT.template($api.byId('remarkjilvtmpl').innerHTML);
             $api.byId('remarkjilv').innerHTML = remarkjilvTmpl(remarkdata);
           }

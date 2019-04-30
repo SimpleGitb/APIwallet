@@ -269,18 +269,30 @@ var token = $api.getStorage('userInfo').token;
               rank: api.pageParam.rank,
               password:enced
           },function(ret){
-            if (ret && ret.flag && ret.data) {
+            if(ret.flag ==true){
               api.sendEvent({
                   name: 'upDateScroll'
               });
-              api.closeWin();
-            } else {
-              api.toast({ msg: ret.errMsg });
+              comFirm('购买成功');
+            }else {
+              // api.toast({ msg: JSON.stringify(ret.errMsg) });
+              comFirm(ret.errMsg);
             }
           })
         }
       })
 
+    }
+    function comFirm(msg){
+      api.alert({
+          title: '提示',
+          msg: msg
+      }, function(ret, err) {
+          // var index = ret.buttonIndex;i
+          if(ret.buttonIndex=="1"){
+            api.closeWin();
+          }
+      });
     }
 </script>
 

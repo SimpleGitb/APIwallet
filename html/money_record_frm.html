@@ -210,7 +210,7 @@
   <script type="text/javascript">
       apiready = function(){
         userInfo = $api.getStorage('userInfo');
-        postRequest('getTransactionRecordList',{accessToken: userInfo.token,},function(ret) {
+        postRequest('getTransactionRecordList',{accessToken: userInfo.token,currency:'AIB'},function(ret) {
           if(ret.flag ==true && ret){
             console.log(JSON.stringify(ret.data))
             let moneyRecordTmpl = doT.template($api.byId('moneyRecordTmpl').innerHTML);

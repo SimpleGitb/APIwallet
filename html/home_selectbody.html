@@ -109,6 +109,7 @@
   apiready = function() {
       fnReady();
       if($api.getStorage('picName')){
+        picName = $api.getStorage('picName');
         let conditionals = doT.template($api.dom('#containTmpl').innerHTML);
         $("#selectLabel").html(conditionals($api.getStorage('picName')));
       }else {
