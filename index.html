@@ -50,15 +50,15 @@
                 data = data.match(/[0-9][0-9]*/g);
                 console.log(data)
                 postRequest('getAppVersionByType',{apptype:'android'},function(ret) {
-                  // console.log(JSON.stringify(ret))
+                  console.log(JSON.stringify(ret))
                   if(ret.flag === true){
                     var loadUrl = ret.data.url;
                     console.log(JSON.stringify(ret))
                       if(Number(ret.data.build)){
                         if(Number(ret.data.build) > data){
                           api.confirm({
-                              title: '更新提醒',
-                              msg: "有新版本啦，是否去下载",
+                              title: '有新版本啦，是否去下载',
+                              msg: ret.data.description,
                               buttons: ['确定', '取消']
                           }, function(ret, err) {
                               if(ret.buttonIndex == 1){
