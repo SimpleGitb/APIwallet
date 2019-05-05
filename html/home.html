@@ -59,14 +59,18 @@
         }
 
         .wrap {
-            position: absolute;
+            position: relative;;
             width: 92%;
-            top: 1.7rem;
-            bottom: .2rem;
+            /*top: 1.7rem;*/
             left: 4%;
             background: #fff;
             border-radius: .26666rem;
-            min-height: 5rem;
+            margin-top: -0.4rem;
+            padding: .2rem auto;
+            padding-bottom: 0.3rem;
+            margin-bottom: 0.2rem;
+            height: 4.6rem;
+            /*overflow-y:  auto;*/
         }
 
         .contain_head {
@@ -144,15 +148,16 @@
             padding:.1rem 0.15rem .4rem;
         }
         .image {
-            width: 3.3rem;
+            width: 3.1rem;
             min-height: 1.4rem;
             border: 1px #E2E2E2 solid;
             border-radius: 5px;
-            margin: .1rem auto 0;
+            margin: .1rem 0 0 0;
+            height: 2rem;
         }
         .image img {
           width: 100%;
-          min-height: 1.4rem;
+          height: 2rem;
           display: block;
         }
         .audio{
@@ -240,8 +245,8 @@
         }
         .question {
             padding: 0 .15rem;
-            height: 4.3rem;
-            overflow-y:auto;
+            /*height: 100%;
+            overflow-y:auto;*/
         }
     </style>
 </head>
@@ -269,7 +274,8 @@
       <div class="wrap">
           <div class="swiper-container">
               <div class="swiper-wrapper" id="conditionals">
-                <div class="swiper-slide questH" id="todaySummary"></div>
+                <div class="swiper-slide questH" id="todaySummary">
+                </div>
               </div>
           </div>
       </div>
@@ -302,7 +308,7 @@
             </audio>
           </div>{{ } }}
           {{ if(it[k].taskType == '3'){ }}
-          <div class="image"><img src="{{= it[k].taskMedia }}" /></div>
+          <div class="image"><img src="{{= it[k].taskMedia }}"/></div>
           {{ } }}
           {{ if(it[k].answerType == '1'){ }}
             {{ for(let i in it[k].options) { }}
@@ -322,7 +328,7 @@
               <img src="../image/route.png" alt="">
             </div>
           {{ } }}
-          <div class="contain_footer" style="width: 100%;margin-top:.3rem;padding:0">
+          <div class="contain_footer" style="width: 100%;margin-top:.3rem;padding:0;">
             <input class="btn exportCameraButton" type="button" value="确认" onclick="router('{{= it[k].taskId }}','{{= it[k].scrollId }}','{{= parseInt(k)+1 }}')">
             <!-- <div class="swiper-next btn" tapmode onclick="router('{{= it[k].taskId }}','{{= it[k].scrollId }}','{{= parseInt(k)+1 }}')">确认</div> -->
           </div>

@@ -35,160 +35,22 @@
 <script type="text/javascript" src="./script/doT.min.js"></script>
 <script type="text/javascript">
     apiready = function() {
-        userInfo = $api.getStorage('userInfo');
-        if($api.getStorage('mail')){
-          $api.val($api.byId('tel'),$api.getStorage('mail') || '')
-        }
-        fnReady()
-        exitApp();
-
-        api.readFile({
-            path: './build.xml'
-        }, function(ret, err) {
-            if (ret.status) {
-                var data = ret.data;
-                data = data.match(/[0-9][0-9]*/g);
-                console.log(data)
-                postRequest('getAppVersionByType',{apptype:'android'},function(ret) {
-                  console.log(JSON.stringify(ret))
-                  if(ret.flag === true){
-                    var loadUrl = ret.data.url;
-                    console.log(JSON.stringify(ret))
-                      if(Number(ret.data.build)){
-                        if(Number(ret.data.build) > data){
-                          api.confirm({
-                              title: '有新版本啦，是否去下载',
-                              msg: ret.data.description,
-                              buttons: ['确定', '取消']
-                          }, function(ret, err) {
-                              if(ret.buttonIndex == 1){
-                                api.openApp({
-                                    androidPkg: 'android.intent.action.VIEW',
-                                    mimeType: 'text/html',
-                                    uri: loadUrl
-                                },function(ret,err){
-
-                                });
-                              }
-                          });
-                        }
-                      }else {
-
-                      }
-                  }else{
-                    api.toast({msg: ret.errMsg});
-                  }
-                });
-            } else {
-                alert(err.msg);
-            }
+      fnReady();
+      openFrame();
+    };
+    function openFrame() {
+        api.openFrame({
+            name: 'login',
+            url: './html/login.html',
+            rect: {
+                x: 0,
+                y: 0,
+            },
+            vScrollBarEnabled:true,
+            allowEdit:true,
+            bounces:false,
+            scaleEnabled:true
         });
-        if(userInfo){
-          if($api.getStorage('guidebool') == '0'){
-            api.openWin({
-                name: 'guidePage',
-                url: './html/guidePage.html',
-                bounces: false
-            });
-          }else {
-            fnOpenMain()
-          }
-        } else {
-          $api.rmStorage('userInfo');
-        };
-    };
-
-    $(function(){
-        $('input').focus(function(){
-          $(this).parent().siblings().find('.clear').hide();
-          $(this).parent().find('.clear').show();
-        })
-    })
-
-    function fnLogin() {
-      let formList = [$api.byId('tel'),$api.byId('password')]
-      let param = {
-        phone: $api.val(formList[0]),
-        code: $api.val(formList[1]),
-        type: '4'
-      }
-      let Email = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-      if(param.phone == ''){
-        api.toast({msg: '请输入您的邮箱'});
-        return
-      }
-      if(!Email.test(param.phone)){
-        api.toast({msg: '邮箱格式不正确'})
-        return
-      }
-      if(param.code == ''){
-        api.toast({msg: '请输入您的密码'});
-        return
-      }
-      postRequest('newLogin',param,function(ret) {
-        if(ret.flag === true){
-            setUserInfo(ret.data);
-            console.log(JSON.stringify(ret));
-            if(ret.data.hasScroll == false){
-              $api.setStorage('guidebool','0');
-              api.openWin({
-                  name: 'guidePage',
-                  url: './html/guidePage.html',
-                  bounces: false
-              });
-            }else {
-              fnOpenMain();
-            }
-        }else{
-          console.log(JSON.stringify(ret));
-          api.toast({msg: ret.errMsg});
-        }
-      })
-    };
-    function fnForgetPassword(){
-      api.openWin({
-          name: 'forget_password',
-          url: './html/forget_password.html',
-          bounces: false,
-      });
-    };
-    function fnoOpenRegister(){
-      api.openWin({
-          name: 'register',
-          url: './html/register.html',
-          bounces: false,
-      });
-    };
-    function fnOpenMain(){
-      api.openWin({
-          name: 'main',
-          url: './html/main.html',
-          bounces: false,
-          slidBackEnabled: false,
-      });
-    };
-    function exitApp(){
-      api.addEventListener({
-        name: 'keyback'
-      }, function(ret, err){
-        api.toast({
-          msg: '再次点击返回键退出APP',
-          duration:2000,
-          location: 'bottom'
-        });
-
-        api.addEventListener({
-          name: 'keyback'
-        }, function(ret, err){
-          api.closeWidget({
-            id: 'A6000006819054',
-            silent:true
-          });
-        });
-        setTimeout(function(){
-          exitApp();
-        },3000)
-      });
     }
 </script>
 </html>

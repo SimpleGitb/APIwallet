@@ -68,12 +68,12 @@
     {{ for(let k in it) { }}
       <div class="row">
           <div class="row_top">
-              <div class="row_top_l">{{= it.title}} </div>
-              <span>{{= it.createTime}}</span>
+              <div class="row_top_l">{{= it[k].title}} </div>
+              <span>{{= it[k].createTime}}</span>
           </div>
           <div class="row_bottom">
               <p>
-                {{= it.content}}
+                {{= it[k].content}}
               </p>
           </div>
       </div>
