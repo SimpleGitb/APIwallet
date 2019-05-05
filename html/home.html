@@ -420,9 +420,14 @@ apiready = function () {
       name: 'myEvent'
   }, function(ret, err) {
       if(ret.value){
-        $api.dom('#selectlabel').innerHTML = ret.value.msg;
+        selectLabeltext(ret.value.msg);
+        // $api.dom('.selectlabel').innerHTML = ret.value.msg;
+        $('.selectlabel').text(ret.value.msg)
         // console.log(JSON.stringify(ret.value.msg));
-        selectLabeltext(ret.value.msg)
+        // console.log($('.selectlabel').text())
+        // $('.selectlabel').each((i,v)=>{
+        //   console.log($(v).text())
+        // });
       }
   });
   api.addEventListener({
@@ -450,6 +455,7 @@ var picNameOption = function(){
 };
 var selectLabeltext = function(){
   var text;
+  console.log(api.pageParam.name)
   if(api.pageParam.name){
     text = api.pageParam.name;
   }else {
@@ -543,8 +549,8 @@ function nextQuestion(){
     mySwiper.allowSlideNext = true
     mySwiper.slideNext();
     $('.row').removeClass('active');
-    if($api.dom('#selectlabel')){
-      $api.dom('#selectlabel').innerHTML = "请选择标签";
+    if($('.selectlabel')){
+      $('.selectlabel').text("请选择标签");
     }
     $('.textarea').val('');
     var myAuto = document.getElementById('myAudio');
@@ -565,7 +571,7 @@ function router(taskId,scrollId,index){
     },3000)
   }
   let answer = $('.active').find('span').html();
-  let answer2 = $('#selectlabel').html();
+  let answer2 = $('.selectlabel').html();
   let answer3 = "";
   $('.textarea').each((i,v)=>{
     answer3 = ($(v).val()?$(v).val():answer3);
