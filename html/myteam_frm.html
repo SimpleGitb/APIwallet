@@ -79,6 +79,20 @@
             height: .16rem;
             margin: .3rem .08rem 0 .08rem;
           }
+          .nodata{
+            width: 100%;
+            height: 4rem;
+            text-align: center;
+          }
+          .nodata img{
+            width: 0.6rem;
+            height: .72rem;
+            margin-top: 2rem;
+          }
+          .nomessage{
+            font-size: .15rem;
+            color: #BEBEBE;
+          }
       </style>
   </head>
   <body>
@@ -117,6 +131,10 @@
         </div>
         <div class="blank"></div>
     {{ }else{ }}
+    <div class="nodata">
+      <img src="../image/no_data.png" alt="">
+      <div class="nomessage">暂无社群</div>
+    </div>
     {{ } }}
   </script>
   <script type="text/javascript" src="../script/api.js"></script>
