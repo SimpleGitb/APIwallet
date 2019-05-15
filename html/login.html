@@ -53,6 +53,7 @@
                   console.log(JSON.stringify(ret))
                   if(ret.flag === true){
                     var loadUrl = ret.data.url;
+                    $api.setStorage('loadUrl',loadUrl);
                     console.log(JSON.stringify(ret))
                       if(Number(ret.data.build)){
                         if(Number(ret.data.build) > data){

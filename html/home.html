@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="../css/swiper.min.css"/>
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
     <link rel="stylesheet" type="text/css" href="../css/unite.css"/>
+    <link rel="stylesheet" href="../css/viewer.css">
     <style>
         html,body{
             background: #F5F5F5;
@@ -59,7 +60,7 @@
         }
 
         .wrap {
-            position: relative;;
+            position: relative;
             width: 92%;
             /*top: 1.7rem;*/
             left: 4%;
@@ -149,13 +150,14 @@
         }
         .image {
             width: 3.1rem;
-            min-height: 1.4rem;
             border: 1px #E2E2E2 solid;
             border-radius: 5px;
             margin: .1rem 0 0 0;
             height: 2rem;
+            overflow: hidden;
         }
         .image img {
+          /*transfrom:scale{2,2};*/
           width: 100%;
           height: 2rem;
           display: block;
@@ -248,6 +250,23 @@
             /*height: 100%;
             overflow-y:auto;*/
         }
+        /*.viewer-fixed {
+          clear: both;
+            position: absolute !important;
+            top: 0;
+          clear: both;
+        }
+        .viewer-canvas {
+          clear: both;
+            position: absolute;
+            top: 0;
+        }*/
+        .viewer-canvas img{
+          width: 100%;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+          margin-top: 10px !important;
+        }
     </style>
 </head>
 <body>
@@ -308,7 +327,15 @@
             </audio>
           </div>{{ } }}
           {{ if(it[k].taskType == '3'){ }}
-          <div class="image"><img src="{{= it[k].taskMedia }}"/></div>
+          <div class="image">
+            <ul class="jq22">
+        		<li>
+              <img data-original="{{= it[k].taskMedia }}" src="{{= it[k].taskMedia }}" />
+              <!-- <img data-original="../image/detail.png" src="../image/detail.png" alt="图片1"> -->
+            </li>
+        		</ul>
+          </div>
+          <!-- <img src="{{= it[k].taskMedia }}" class="zoom"/> -->
           {{ } }}
           {{ if(it[k].answerType == '1'){ }}
             {{ for(let i in it[k].options) { }}
@@ -344,31 +371,38 @@
     </div>
   </script>
   <script id="todayTmpl" type="text/template">
-    <div class="result_title">今日题目已答完<span>请休息一下吧</span></div>
+    <div class="result_title">今日题目已答完<span>每日凌晨在云端计算所有人的正确答案，请明天来查看结算吧</span></div>
     <ul class="result_list">
         <li>
-            <span class="result_l">今日收益(MYAI)</span>
-            <span class="result_r">{{= it.todayReward }}</span>
+            <span class="result_l">昨日收益(MYAI)</span>
+            <span class="result_r">{{= it.yesterdayReward }}</span>
         </li>
         <li>
-            <span class="result_l">今日准确率</span>
-            <span class="result_r">{{= parseFloat(it.todayAccuracy) * 100 }}%</span>
+            <span class="result_l">昨日准确率</span>
+            <span class="result_r">{{= parseFloat(it.yesterdayAccuracy) * 100 }}%</span>
         </li>
         <li>
-            <span class="result_l">卷轴道数(道)</span>
+            <span class="result_l">昨日卷轴消耗</span>
+            <span class="result_r">{{= it.yesterdayScrollCount }}</span>
+        </li>
+        <li>
+            <span class="result_l">剩余卷轴题数(道)</span>
             <span class="result_r">{{= it.scrollRemain }}</span>
         </li>
     </ul>
-    <div class="contain_footer">
+    <div class="contain_footer" style="margin-top:-30px;">
       <div class="btn" tapmode onclick='Cathistory()'>查看历史</div>
     </div>
   </script>
 </body>
+
+
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/jquery.min.js"></script>
 <script type="text/javascript" src="../script/doT.min.js"></script>
 <script type="text/javascript" src="../script/swiper.min.js"></script>
 <script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript" src="../script/viewer.min.js"></script>
 <script>
 let summary,
     questionL = 0,values,optionData,optiontaskId,optionansId;
@@ -405,6 +439,18 @@ apiready = function () {
             $("#todaySummary").before(conditionals(ret.data));
             // console.log(JSON.stringify(ret.data));
             optionData = ret.data;
+            $('.jq22').viewer({
+              toolbar: false,
+              tooltip: false,
+              title: false,
+              button: false,
+              navbar: false,
+              loop: false,
+              zoomable: false,
+              movable: false,
+              fullscreen: true,
+          		url: 'data-original',
+          	});
         } else {
             // 无数据
             let Tmpl = doT.template($api.dom('#Tmpl').innerHTML);
@@ -461,7 +507,7 @@ var picNameOption = function(){
 };
 var selectLabeltext = function(){
   var text;
-  console.log(api.pageParam.name)
+  // console.log(api.pageParam.name)
   if(api.pageParam.name){
     text = api.pageParam.name;
   }else {
@@ -686,6 +732,15 @@ function selectLabel(){
       name: 'home_selectlabel',
       url: './home_selectlabel.html',
   });
+}
+$(function() {
+	$('.jq22').viewer({
+    inline: true,
+		url: 'data-original',
+	});
+});
+$('img').onclick = function() {
+	viewer.hide();
 }
 </script>
 </html>

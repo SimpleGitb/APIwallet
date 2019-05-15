@@ -10,7 +10,7 @@
   <body>
     <header id="header">
       <div class="event-back"></div>
-      <div class="nav">分享</div>
+      <div class="nav">邀请好友</div>
     </header>
   </body>
   <script type="text/javascript" src="../script/api.js"></script>
@@ -29,7 +29,10 @@
               x: 0,
               y: $api.dom('header').offsetHeight,
           },
-          bounces: false,
+          vScrollBarEnabled:true,
+          allowEdit:true,
+          bounces:false,
+          scaleEnabled:true
       });
   }
   </script>
