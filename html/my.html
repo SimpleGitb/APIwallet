@@ -128,6 +128,13 @@
           </span>
         </div>
         <div class="blank"></div>
+        <div class="row" onclick="newHand()">
+          <span class="left">
+            <img src="../image/UserSet.png">
+            <span>新手任务</span>
+          </span>
+        </div>
+        <div class="blank"></div>
         <div class="row" onclick="set()">
           <span class="left">
             <img src="../image/Set.png">
@@ -179,6 +186,12 @@
     api.openWin({
         name: 'message_win',
         url: './message_win.html',
+    });
+  }
+  function newHand() {
+    api.openWin({
+        name: 'guide_win',
+        url: './guide_win.html',
     });
   }
   function inviteuser() {

@@ -87,8 +87,8 @@
         if(userInfo){
           if($api.getStorage('guidebool') == '0'){
             api.openWin({
-                name: 'guidePage',
-                url: './guidePage.html',
+                name: 'guide_win',
+                url: './guide_win.html',
                 bounces: false
             });
           }else {
@@ -133,8 +133,8 @@
             if(ret.data.hasScroll == false){
               $api.setStorage('guidebool','0');
               api.openWin({
-                  name: 'guidePage',
-                  url: './guidePage.html',
+                  name: 'guide_win',
+                  url: './guide_win.html',
                   bounces: false
               });
             }else {

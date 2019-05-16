@@ -117,7 +117,11 @@
       apiready = function(){
         address = $api.getStorage('userInfo');
         loadUrl = $api.getStorage('loadUrl');
-        $api.dom('#invateCode').innerHTML = address.invitationCode;
+        if(address.invitationCode){
+          $api.dom('#invateCode').innerHTML = address.invitationCode;
+        }else {
+          $api.dom('#invateCode').innerHTML = 00000;
+        }
         // console.log(JSON.stringify(loadUrl));
         var qrcode = new QRCode(document.getElementById("wrap_head"), {
             width : 154,//设置宽高
