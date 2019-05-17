@@ -9,7 +9,6 @@
     <link rel="stylesheet" type="text/css" href="../css/swiper.min.css"/>
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
     <link rel="stylesheet" type="text/css" href="../css/unite.css"/>
-    <link rel="stylesheet" href="../css/viewer.css">
     <style>
         html,body{
             background: #F5F5F5;
@@ -327,7 +326,7 @@
             </audio>
           </div>{{ } }}
           {{ if(it[k].taskType == '3'){ }}
-          <div class="image">
+          <div class="image" onclick="openPicture('{{= it[k].taskMedia }}')">
             <ul class="jq22">
         		<li>
               <img data-original="{{= it[k].taskMedia }}" src="{{= it[k].taskMedia }}" />
@@ -402,7 +401,6 @@
 <script type="text/javascript" src="../script/doT.min.js"></script>
 <script type="text/javascript" src="../script/swiper.min.js"></script>
 <script type="text/javascript" src="../script/common.js"></script>
-<script type="text/javascript" src="../script/viewer.min.js"></script>
 <script>
 let summary,
     questionL = 0,values,optionData,optiontaskId,optionansId;
@@ -439,18 +437,6 @@ apiready = function () {
             $("#todaySummary").before(conditionals(ret.data));
             // console.log(JSON.stringify(ret.data));
             optionData = ret.data;
-            $('.jq22').viewer({
-              toolbar: false,
-              tooltip: false,
-              title: false,
-              button: false,
-              navbar: false,
-              loop: false,
-              zoomable: false,
-              movable: false,
-              fullscreen: true,
-          		url: 'data-original',
-          	});
         } else {
             // 无数据
             let Tmpl = doT.template($api.dom('#Tmpl').innerHTML);
@@ -733,14 +719,20 @@ function selectLabel(){
       url: './home_selectlabel.html',
   });
 }
-$(function() {
-	$('.jq22').viewer({
-    inline: true,
-		url: 'data-original',
-	});
-});
-$('img').onclick = function() {
-	viewer.hide();
+function openPicture(url){
+  api.openFrame({
+    name: 'pictureLook',
+    url: './pictureLook.html',
+    rect: {
+        x: 0,
+        y: 0,
+        w: 'auto',
+        h: 'auto'
+    },
+    pageParam: {
+        picurl: url
+    }
+  });
 }
 </script>
 </html>
