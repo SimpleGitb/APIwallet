@@ -112,17 +112,18 @@
                 let todayTmpl = doT.template($api.dom('#servicetmpl').innerHTML);
                 $api.dom('#serviceCenter').innerHTML = todayTmpl(ret.data)
                 totalBonus = ret.data.totalBonus;
+                getRequest('branch/getSubBranchList','',function (ret){
+                  if(ret.flag ==true && ret){
+                    let myTeamtmpl = doT.template($api.byId('myTeamtmpl').innerHTML);
+                    $api.byId('myTeam').innerHTML = myTeamtmpl(ret.data);
+                    if(totalBonus){
+                    $api.dom('#totalBonus').innerHTML = totalBonus;
+                    }
+                  }
+                })
               }
             })
-            getRequest('branch/getSubBranchList','',function (ret){
-              if(ret.flag ==true && ret){
-                let myTeamtmpl = doT.template($api.byId('myTeamtmpl').innerHTML);
-                $api.byId('myTeam').innerHTML = myTeamtmpl(ret.data);
-                if(totalBonus){
-                $api.dom('#totalBonus').innerHTML = totalBonus;
-                }
-              }
-            })
+
         }
         function goscroll() {
           api.openWin({
