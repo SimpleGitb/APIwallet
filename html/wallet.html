@@ -157,7 +157,7 @@
             }
           }
           let numtmpl = doT.template($api.byId('numtmpl').innerHTML);
-          $api.byId('num').innerHTML = numtmpl(parseInt(acountcost));
+          $api.byId('num').innerHTML = numtmpl(acountcost);
         }
       })
       api.addEventListener({
@@ -180,7 +180,7 @@
           }
         }
         let numtmpl = doT.template($api.byId('numtmpl').innerHTML);
-        $api.byId('num').innerHTML = numtmpl(parseInt(acountcost));
+        $api.byId('num').innerHTML = numtmpl(acountcost);
       }
     })
   }

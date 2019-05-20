@@ -42,7 +42,7 @@
           }
           .row_l{
             font-size: .14rem;
-            width: 2.02rem;
+            width: 2.22rem;
             margin: .1rem .1rem .1rem .2rem;
             overflow: hidden;
           }
@@ -50,7 +50,9 @@
             font-size: .18rem;
             height: .25rem;
             margin-right: .19rem;
+            margin-top: 5px;
             color: #376AFC;
+            word-break: break-all;
           }
           .row_r_m{
             color: #50D26F;
@@ -84,7 +86,9 @@
       {{ if(it && it.length > 0){ }}
         {{for (var i in it) { }}
           <div class="row">
-            <div class="row_l">{{= it[i].taskDes }}</div>
+            <div class="row_l">{{= it[i].createTime }} {{= it[i].taskRank }}级卷轴 第{{= parseInt(it[i].orderNo)+1 }}题
+            <!-- .{{= it[i].taskDes }} -->
+          </div>
             <div class="row_r {{ if(!(it[i].bonus > 0)){ }}row_r_m{{ } }}">{{= it[i].bonus }} MYAI</div>
           </div>
         {{ } }}
@@ -106,6 +110,7 @@
       };
       function getData(){
           getRequest('question/getQuestionHistory','&page=1&pageSize=40',function(ret){
+            console.log(JSON.stringify(ret))
             var answerListTmpl = doT.template($api.dom('#answerListTmpl').innerHTML);
             $api.dom('#answerList').innerHTML = answerListTmpl(ret.data);
           })
