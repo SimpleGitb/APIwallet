@@ -502,6 +502,7 @@ var selectLabeltext = function(){
   return text;
 }
 var taskMatch = function(val){
+  console.log(val)
   var text;
   var picmat = val.match(/\/m\/[0-9a-zA-Z_]{1,}/g);
   if(picmat != null){
@@ -514,17 +515,20 @@ var taskMatch = function(val){
   }
   var text = val.match(/\/I(\S*?)\/I/g);
   // console.log(val.match(/\/I(\S*?)\/I/g))
+  console.log(text)
   var tempHTML;
-  for(var t = 0;t<text.length;t++){
-    var replaceText = "<font style='background:#FFFF00;color:#000'>"+text[t]+"</font>";
-    tempHTML = val.replace(text[t], replaceText);
-    val = tempHTML;
+  if(text != null){
+    for(var t = 0;t<text.length;t++){
+      var replaceText = "<font style='background:#FFFF00;color:#000'>"+text[t]+"</font>";
+      tempHTML = val.replace(text[t], replaceText);
+      val = tempHTML;
+    }
   }
   // console.log(tempHTML.replace(/\/I/g,""));
   // setTimeout(function(){
   //   $('.taskmatch2').html(tempHTML);
   // },500)
-  return tempHTML.replace(/\/I/g,"");
+  return val.replace(/\/I/g,"");
 }
 var taskpicMatch = function(picVal){
   var text;
